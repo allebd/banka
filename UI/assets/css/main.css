@@ -121,7 +121,7 @@ nav ul li a{
     margin: 2em;   
 }
 
-.feature-title h1, #register form h1{
+.feature-title h1, #form-box form h1{
     font-size: 2em;
     font-weight: 100;
 }
@@ -153,33 +153,33 @@ footer a{
     color: var(--accent-yellow);
 }
 
-/**** Register ****/
+/**** Form-box ****/
 .container.title-bar{ 
     grid-template-rows: 5em 70vh 10em;
 }
 
-#register{
+#form-box{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-areas: ". registeration .";
+    grid-template-areas: ". form-box .";
     grid-gap: 3em;
     justify-items: center;
     align-items: center;
     text-align: center;
 }
 
-#register form{
-    grid-area: registeration;
+#form-box form{
+    grid-area: form-box;
     justify-self: center;
 }
 
-#register input, #register button{    
+#form-box input, #form-box button{    
     width: 80%;
     padding: 10px;
     margin-top: 1em;
 }
 
-#register form a{
+#form-box form a{
     color: var(--primary-purple);
 }
 
@@ -220,9 +220,9 @@ footer a{
         grid-template-rows: 10em 70vh 10em;
     }    
     
-    #register{
+    #form-box{
         grid-template-columns: 1fr;
-        grid-template-areas: "registeration";
+        grid-template-areas: "form-box";
     }
 }
 
