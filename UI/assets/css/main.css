@@ -31,6 +31,18 @@ body{
                     "footer";
 }
 
+.container.title-bar{ 
+    grid-template-rows: 5em 70vh 10em;
+}
+
+.container.title-bar.box-table{ 
+    grid-template-rows: 5em auto auto 10em;
+    grid-template-areas: "banner"
+                "accounts"
+                "table"
+                "footer";
+}
+
 /* Global */
 a{
     text-decoration: none;
@@ -42,7 +54,7 @@ ul li{
 }
 
 .button_primary, .button_secondary{
-    height: 38px;
+    height: 35px;
     background: var(--accent-yellow);
     border: 0;
     padding-left: 20px;
@@ -162,10 +174,6 @@ footer a{
 }
 
 /**** Form-box ****/
-.container.title-bar{ 
-    grid-template-rows: 5em 70vh 10em;
-}
-
 #form-box{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -183,7 +191,7 @@ footer a{
 
 #form-box input, #form-box button, #form-box select{    
     width: 80%;
-    padding: 10px;
+    padding: 8px;
     margin-top: 1em;
 }
 
@@ -197,6 +205,10 @@ footer a{
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 3em;
     padding: 5em;
+}
+
+.box-table #accounts{
+    grid-area: accounts;
 }
 
 .account-card{
@@ -236,10 +248,77 @@ footer a{
     margin-top: 1.5em;
 }
 
+/* Table */
+#box-tables{
+    grid-area: table;
+    padding: 0 5em;
+}
+
+.full-table {
+    grid-column: 1/5;
+}
+
+.full-table div{
+    overflow-x: auto;
+}
+
+.full-table h1, .full-table table tr td{
+    font-weight: 100;
+}
+
+.full-table table{
+    background-color: var(--light-yellow);
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.full-table table img{
+    height: 30px;
+    width: 30px;
+}
+
+.full-table table tr td, .full-table table tr th{
+    text-align: left;
+    padding: 2px;
+}
+
+.full-table table tr:nth-child(even){
+    background:var(--background);
+}
+
+.full-table table tr th{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.full-table table tr td:first-child{
+    text-align: center;
+}
+
+
 /* Media Queries */
+@media(max-width: 1344px) and (min-width: 1024px){
+    .box-table #accounts{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media(max-width: 1024px){
     .container{
         grid-template-rows: 100vh auto 10em;
+    }
+    
+    .container.title-bar{ 
+        grid-template-rows: 10em 70vh 10em;
+    }
+    
+    .container.title-bar.grid-box{ 
+        grid-template-rows: 10em auto 10em;
+    }    
+
+    .container.title-bar.box-table{ 
+        grid-template-rows: 10em auto auto 10em;
     }
 
     header{
@@ -268,14 +347,6 @@ footer a{
     #banner-image{
         display: none;
     }    
-
-    .container.title-bar{ 
-        grid-template-rows: 10em 70vh 10em;
-    }
-    
-    .container.title-bar.grid-box{ 
-        grid-template-rows: 10em auto 10em;
-    }
     
     #form-box{
         grid-template-columns: 1fr;
@@ -284,6 +355,10 @@ footer a{
 
     #accounts{
         grid-template-columns: 1fr;
+    }
+
+    .full-table table{
+        width: 150%;
     }
 }
 
@@ -306,5 +381,9 @@ footer a{
     
     .feature3{
         justify-self: center;
+    }
+
+    .full-table table{
+        width: 200%;
     }
 }
