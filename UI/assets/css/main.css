@@ -173,7 +173,7 @@ footer a{
     justify-self: center;
 }
 
-#form-box input, #form-box button{    
+#form-box input, #form-box button, #form-box select{    
     width: 80%;
     padding: 10px;
     margin-top: 1em;
