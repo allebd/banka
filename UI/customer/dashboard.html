@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>💰 Banka :::: Create Account</title>
+    <title>💰 Banka :::: Accounts</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/main.css">
     <!-- <script src="main.js"></script> -->
 </head>
 <body>
-    <div class="container title-bar">
+    <div class="container title-bar grid-box">
         <div class="banner">
             <header>
                 <div class="branding">
@@ -24,18 +24,36 @@
                 </nav>
             </header>
         </div>
-        <section id='form-box'>
-            <form action="accounts.html">                
-                <h1>Create Account</h1>                
-                <label>Select your preferred account type</label>
-                <select name="" id="">
-                    <option selected disabled>Account Type</option>
-                    <option value='savings'>Savings</option>
-                    <option value='current'>Current</option>
-                </select>
-                <button class="button_primary">Create</button>
-                <p><a href="accounts.html">Click to view all accounts</a></p>
-            </form>
+        <section id="accounts">
+            <div class="account-card dashboard-card">
+                <div>
+                    <h5>Your Balance</h5>
+                    <p>₦17,238.98</p>
+                </div>
+            </div>
+            <div class="account-card dashboard-card">
+                <div>
+                    <h5>Account Type</h5>
+                    <p>Current</p>
+                </div>
+            </div>
+            <div class="account-card dashboard-card">
+                <div>
+                    <h5>Account Number</h5>
+                    <p>0046 232 201</p>
+                </div> 
+            </div>
+            <div class="account-card dashboard-card">
+                    <div>
+                        <h5>Total Transactions this month</h5>
+                        <p>434</p>
+                    </div> 
+                </div>
+        </section>
+        <section id="table">
+            <div>
+                <table></table>
+            </div>
         </section>
         <footer>
             <p>Andela Developer Challenge ©️ 2019 :::: Made with ❤️ by <a href="https://github.com/allebd" target="_blank">allebd</a></p>
