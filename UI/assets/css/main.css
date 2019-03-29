@@ -189,6 +189,17 @@ footer a{
     justify-self: center;
 }
 
+#form-box label.label-box{
+    text-align: center;
+    width: 100%;
+    display: block;
+    /* display: block;
+    width: auto;
+    float:left;
+    margin-right:10px;
+    padding:5px 0; */
+}
+
 #form-box input, #form-box button, #form-box select{    
     width: 80%;
     padding: 8px;
@@ -296,6 +307,15 @@ footer a{
     text-align: center;
 }
 
+.full-table.table-bold-start tr td:first-child{
+    font-weight: bold;
+    text-align: right;
+    padding-right: 30px;
+}
+
+.full-table.table-bold-start tr td{
+    padding: 5px;
+}
 
 /* Media Queries */
 @media(max-width: 1344px) and (min-width: 1024px){
