@@ -9,7 +9,7 @@
     <!-- <script src="main.js"></script> -->
 </head>
 <body>
-    <div class="container title-bar grid-box">
+    <div class="container title-bar box-table">
         <div class="banner">
             <header>
                 <div class="branding">
@@ -30,6 +30,12 @@
                     <h5>Your Balance</h5>
                     <p>₦17,238.98</p>
                 </div>
+            </div>            
+            <div class="account-card dashboard-card">
+                <div>
+                    <h5>Account Number</h5>
+                    <p>0046 232 201</p>
+                </div> 
             </div>
             <div class="account-card dashboard-card">
                 <div>
@@ -39,20 +45,90 @@
             </div>
             <div class="account-card dashboard-card">
                 <div>
-                    <h5>Account Number</h5>
-                    <p>0046 232 201</p>
+                    <h5>Account Status</h5>
+                    <p>Active</p>
                 </div> 
-            </div>
-            <div class="account-card dashboard-card">
-                    <div>
-                        <h5>Total Transactions this month</h5>
-                        <p>434</p>
-                    </div> 
-                </div>
+            </div>            
         </section>
-        <section id="table">
-            <div>
-                <table></table>
+        <section id="box-tables">
+            <div class="full-table">
+                <h1>Transactions History</h1>
+                <div>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Transaction Type</th>
+                            <th>Sender</th>
+                            <th>Recipient</th>
+                            <th>Amount (₦)</th>
+                            <th>Old Balance (₦)</th>
+                            <th>New Balance (₦)</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td><img src="../assets/img/credit.png" alt="Credit"></td>
+                            <td>23-Mar-2019</td>
+                            <td>23:06:15</td>
+                            <td>Credit</td>
+                            <td>Jamie Foxx</td>
+                            <td>James Bond</td>
+                            <td>2000</td>
+                            <td>4000</td>
+                            <td>6000</td>
+                            <td><button class="button_secondary"><a href="transaction.html">View more</a></button></td>
+                        </tr>
+                        <tr>
+                            <td><img src="../assets/img/debit.png" alt="debit"></td>
+                            <td>09-Mar-2019</td>
+                            <td>23:06:15</td>
+                            <td>Debit</td>
+                            <td>James Bond</td>
+                            <td>Micheal Jordan</td>
+                            <td>4000</td>
+                            <td>6000</td>
+                            <td>8000</td>
+                            <td><button class="button_secondary"><a href="transaction.html">View more</a></button></td>
+                        </tr>
+                        <tr>
+                            <td><img src="../assets/img/debit.png" alt="debit"></td>
+                            <td>09-Mar-2019</td>
+                            <td>23:06:15</td>
+                            <td>Debit</td>
+                            <td>James Bond</td>
+                            <td>Micheal Jordan</td>
+                            <td>4000</td>
+                            <td>6000</td>
+                            <td>8000</td>
+                            <td><button class="button_secondary"><a href="transaction.html">View more</a></button></td>
+                        </tr>
+                        <tr>
+                            <td><img src="../assets/img/credit.png" alt="Credit"></td>
+                            <td>23-Mar-2019</td>
+                            <td>23:06:15</td>
+                            <td>Credit</td>
+                            <td>Jamie Foxx</td>
+                            <td>James Bond</td>
+                            <td>2000</td>
+                            <td>4000</td>
+                            <td>6000</td>
+                            <td><button class="button_secondary"><a href="transaction.html">View more</a></button></td>
+                        </tr>
+                        <tr>
+                            <td><img src="../assets/img/debit.png" alt="debit"></td>
+                            <td>09-Mar-2019</td>
+                            <td>23:06:15</td>
+                            <td>Debit</td>
+                            <td>James Bond</td>
+                            <td>Micheal Jordan</td>
+                            <td>4000</td>
+                            <td>6000</td>
+                            <td>8000</td>
+                            <td><button class="button_secondary"><a href="transaction.html">View more</a></button></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </section>
         <footer>
