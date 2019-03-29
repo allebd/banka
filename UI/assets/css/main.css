@@ -53,7 +53,7 @@ ul li{
     list-style: none;
 }
 
-.button_primary, .button_secondary{
+.button_primary, .button_secondary, .button_success, .button_danger{
     height: 35px;
     background: var(--accent-yellow);
     border: 0;
@@ -64,6 +64,14 @@ ul li{
 
 .button_secondary{
     background: var(--primary-purple);
+}
+
+.button_success{
+    background: var(--success-green);
+}
+
+.button_danger{
+    background: var(--danger-red);
 }
 
 /**** Home ****/
@@ -303,7 +311,7 @@ footer a{
     padding-bottom: 10px;
 }
 
-.full-table table tr td:first-child{
+.full-table table tr td:first-child, .full-table table tr th:first-child{
     text-align: center;
 }
 
