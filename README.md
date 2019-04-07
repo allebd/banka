@@ -3,10 +3,10 @@
 ## Table of Contents
 
 * [About](#about)
-* [Required Features](#required%20features)
-* [Optional Features](#optional%20features)
-* [UI Templates](#ui%20templates)
-* [Pivotal Tracker](#pivotal%20tracker)
+* [Required Features](#required-features)
+* [Optional Features](#optional-features)
+* [UI Templates](#ui-templates)
+* [Pivotal Tracker](#pivotal-tracker)
 * [Technologies](#technologies)
 * [Acknowledgements](#acknowledgements)
 * [Author](#author)
@@ -52,8 +52,8 @@ Pivotal Tracker Stories can found here [Pivotal Tracker](https://www.pivotaltrac
 
 ## Acknowledgements
 
-[Andela](https://andela.com/)
-[Icons8](https://icons8.com/)
+* [Andela](https://andela.com/)
+* [Icons8](https://icons8.com/)
 
 ## Author
 
