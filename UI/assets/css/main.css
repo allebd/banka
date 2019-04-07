@@ -1,0 +1,450 @@
+:root {
+    --background: #f4f4f4;
+    --white: #ffffff;
+    --black: #000000;
+    --primary-purple: #640d5e;
+    --accent-yellow: #e89419;
+    --danger-red: #b00020;
+    --success-green: #5fba7d;
+}
+
+/*border box allows us to add padding and border to our elements without increasing their size */
+*, *::before, *::after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body{
+    padding: 0;
+    margin: 0;
+    background-color: var(--background);
+}
+
+.container{
+    display: grid;
+    font: 15px/1.5 Arial, Helvetica, sans-serif;   
+    grid-template-rows: 80vh auto 10em;
+    grid-template-areas: "banner"
+                    "features"
+                    "footer";
+}
+
+.container.title-bar{ 
+    grid-template-rows: 5em 70vh 10em;
+}
+
+.container.title-bar.box-table{ 
+    grid-template-rows: 5em auto auto 10em;
+    grid-template-areas: "banner"
+                "accounts"
+                "table"
+                "footer";
+}
+
+/* Global */
+a{
+    text-decoration: none;
+    color: var(--white);
+}
+
+ul li{
+    list-style: none;
+}
+
+.button_primary, .button_secondary, .button_success, .button_danger{
+    height: 35px;
+    background: var(--accent-yellow);
+    border: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: var(--white);
+}
+
+.button_secondary{
+    background: var(--primary-purple);
+}
+
+.button_success{
+    background: var(--success-green);
+}
+
+.button_danger{
+    background: var(--danger-red);
+}
+
+/**** Home ****/
+/* Banner */
+.banner{
+    grid-area: banner;
+    background: url('../img/raspberry.jpg') no-repeat 0 -400px;
+    display: grid;    
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 5em auto;
+    grid-template-areas: "header header"
+                    "banner-text banner-image";
+    color: var(--white);
+    padding: 0 4em;
+}
+
+#banner-text{
+    grid-area: banner-text;
+    align-self: center;
+}
+
+#banner-text h1{
+    font-size: 4em;
+    font-weight: 100;
+    margin: 0;
+}
+
+#banner-image{
+    grid-area: banner-image;
+    justify-self: center;
+    align-self: center;
+}
+
+/* Header */
+header{
+    grid-area: header;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas: "branding nav";
+}
+
+/* Brand Logo */
+.branding{
+    grid-area: branding;
+}
+
+/* Navigation */
+nav{
+    grid-area: nav;
+    justify-self: end;
+    align-self: center;
+}
+
+nav ul li {
+    display: inline;
+    line-height: 35px;
+}
+
+nav ul li a{
+    color: var(--white);
+    padding: 0.7em;
+}
+
+/* Features */
+#features{
+    grid-area: features;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    text-align: center;
+}
+
+.feature-title{
+    grid-column: 1/4;
+    width: 45%;
+    margin: 2em;   
+}
+
+.feature-title h1, #form-box form h1{
+    font-size: 2em;
+    font-weight: 100;
+}
+
+.feature{
+    width:50%;
+}
+
+.feature1{
+    justify-self: end;
+}
+
+.feature3{
+    justify-self: start;
+}
+
+/* Footer */
+footer{
+    grid-area: footer;
+    align-self: center;
+    padding: 10px;
+    margin-top: 5em;
+    color: var(--white);
+    background-color: var(--primary-purple);
+    text-align: center;
+}
+
+footer a{
+    color: var(--accent-yellow);
+}
+
+/**** Form-box ****/
+#form-box{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas: ". form-box .";
+    grid-gap: 3em;
+    justify-items: center;
+    align-items: center;
+    text-align: center;
+}
+
+#form-box form{
+    grid-area: form-box;
+    justify-self: center;
+}
+
+#form-box label.label-box{
+    text-align: center;
+    width: 100%;
+    display: block;
+    /* display: block;
+    width: auto;
+    float:left;
+    margin-right:10px;
+    padding:5px 0; */
+}
+
+#form-box input, #form-box button, #form-box select{    
+    width: 80%;
+    padding: 8px;
+    margin-top: 1em;
+}
+
+#form-box form a{
+    color: var(--primary-purple);
+}
+
+/* Accounts */
+#accounts{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 3em;
+    padding: 5em;
+}
+
+.box-table #accounts{
+    grid-area: accounts;
+}
+
+.account-card{
+    background: rgb(232, 148, 25, 0.7);
+    padding:15px;
+    height: 200px;
+}
+
+.account-card.dashboard-card{
+    height: 100px;
+}
+
+.account-card h5{
+    margin: 0;
+}
+
+.account-card p{
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: 2em;
+    font-weight: 100;    
+    color: var(--white);
+}
+
+.account-card.dashboard-card p{
+    font-size: 2.5em;
+}
+
+.account-card .add-account{
+    height: 100%;
+    justify-items: center;
+    text-align: center;
+    color: var(--black);
+}
+
+.account-card .add-account img{
+    margin-top: 1.5em;
+}
+
+/* Table */
+#box-tables{
+    grid-area: table;
+    padding: 0 5em;
+}
+
+.full-table {
+    grid-column: 1/5;
+}
+
+.full-table div{
+    overflow-x: auto;
+}
+
+.full-table h1, .full-table table tr td{
+    font-weight: 100;
+}
+
+.full-table table{
+    background-color: rgb(232, 148, 25, 0.7);
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.full-table table img{
+    height: 30px;
+    width: 30px;
+}
+
+.full-table table tr td, .full-table table tr th{
+    text-align: left;
+    padding: 2px;
+}
+
+.full-table table tr:nth-child(even){
+    background:var(--background);
+}
+
+.full-table table tr th{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.full-table table tr td:first-child, .full-table table tr th:first-child{
+    text-align: center;
+}
+
+.full-table.table-bold-start tr td:first-child{
+    font-weight: bold;
+    text-align: right;
+    padding-right: 30px;
+}
+
+.full-table.table-bold-start tr td{
+    padding: 5px;
+}
+
+/* Modal boxes */
+.modal-box{
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: grid;
+    justify-items: center;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content{    
+    padding: 15px;
+    margin: auto;
+    max-height: 20%;
+    background-color: var(--background);
+}
+
+.modal-header{
+    border-bottom: 1px solid #e89419;
+}
+
+.modal-header h3{
+    margin: 0;
+}
+
+#delete-account, #activate-account, #deactivate-account{
+    display: none;
+}
+
+
+/* Media Queries */
+@media(max-width: 1344px) and (min-width: 1024px){
+    .box-table #accounts{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 1024px){
+    .container{
+        grid-template-rows: 50% auto 10em;
+    }
+    
+    .container.title-bar{ 
+        grid-template-rows: 13em 70vh 10em;
+    }
+    
+    .container.title-bar.grid-box{ 
+        grid-template-rows: 13em auto 10em;
+    }    
+
+    .container.title-bar.box-table{ 
+        grid-template-rows: 13em auto auto 10em;
+    }
+
+    header{
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas: "branding"
+                        "nav";
+        justify-items: center;
+    }
+    
+    nav{
+        justify-self: center;
+    }
+
+    .banner{
+        grid-template-areas: "header header"
+                        "banner-text banner-text";
+    }
+
+    #banner-text h1{
+        font-size: 3em;
+        font-weight: 100;
+        margin: 0;
+    }
+
+    #banner-image{
+        display: none;
+    }    
+    
+    #form-box{
+        grid-template-columns: 1fr;
+        grid-template-areas: "form-box";
+    }
+
+    #accounts{
+        grid-template-columns: 1fr;
+    }
+
+    .full-table table{
+        width: 150%;
+    }
+}
+
+@media(max-width: 900px){
+    #features{
+        grid-template-columns: 1fr;
+    }
+
+    .feature-title{
+        grid-column: 1/1;
+    }
+
+    .feature{
+        width:50%;
+    }
+    
+    .feature1{
+        justify-self: center;
+    }
+    
+    .feature3{
+        justify-self: center;
+    }
+
+    .full-table table{
+        width: 200%;
+    }
+}
