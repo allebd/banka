@@ -1,0 +1,26 @@
+{
+  "name": "banka",
+  "version": "1.0.0",
+  "description": "Banka is a light-weight core banking application that powers banking operations like account creation, customer deposit and withdrawals.",
+  "main": "API/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allebd/banka.git"
+  },
+  "keywords": [
+    "banka",
+    "finance",
+    "deposit",
+    "withdrawals",
+    "money"
+  ],
+  "author": "Bella Oyedele",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/allebd/banka/issues"
+  },
+  "homepage": "https://github.com/allebd/banka#readme"
+}
