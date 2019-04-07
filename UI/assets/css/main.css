@@ -4,7 +4,6 @@
     --black: #000000;
     --primary-purple: #640d5e;
     --accent-yellow: #e89419;
-    --light-yellow: rgb(232, 148, 25, 0.7);
     --danger-red: #b00020;
     --success-green: #5fba7d;
 }
@@ -127,6 +126,7 @@ nav{
 
 nav ul li {
     display: inline;
+    line-height: 35px;
 }
 
 nav ul li a{
@@ -231,7 +231,7 @@ footer a{
 }
 
 .account-card{
-    background: var(--light-yellow);
+    background: rgb(232, 148, 25, 0.7);
     padding:15px;
     height: 200px;
 }
@@ -286,7 +286,7 @@ footer a{
 }
 
 .full-table table{
-    background-color: var(--light-yellow);
+    background-color: rgb(232, 148, 25, 0.7);
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
@@ -325,6 +325,39 @@ footer a{
     padding: 5px;
 }
 
+/* Modal boxes */
+.modal-box{
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: grid;
+    justify-items: center;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content{    
+    padding: 15px;
+    margin: auto;
+    max-height: 20%;
+    background-color: var(--background);
+}
+
+.modal-header{
+    border-bottom: 1px solid #e89419;
+}
+
+.modal-header h3{
+    margin: 0;
+}
+
+#delete-account, #activate-account, #deactivate-account{
+    display: none;
+}
+
+
 /* Media Queries */
 @media(max-width: 1344px) and (min-width: 1024px){
     .box-table #accounts{
@@ -334,19 +367,19 @@ footer a{
 
 @media(max-width: 1024px){
     .container{
-        grid-template-rows: 100vh auto 10em;
+        grid-template-rows: 50% auto 10em;
     }
     
     .container.title-bar{ 
-        grid-template-rows: 10em 70vh 10em;
+        grid-template-rows: 13em 70vh 10em;
     }
     
     .container.title-bar.grid-box{ 
-        grid-template-rows: 10em auto 10em;
+        grid-template-rows: 13em auto 10em;
     }    
 
     .container.title-bar.box-table{ 
-        grid-template-rows: 10em auto auto 10em;
+        grid-template-rows: 13em auto auto 10em;
     }
 
     header{

@@ -6,7 +6,6 @@
     <title>💰 Banka :::: Administrator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/main.css">
-    <!-- <script src="main.js"></script> -->
 </head>
 <body>
     <div class="container title-bar">
@@ -26,20 +25,21 @@
         <section id='form-box'>
             <form action="staffdashboard.html">                
                 <h1>Administrator Login</h1>
-                <select name="" id="">
+                <select name="" id="adminrole">
                     <option selected disabled>Select Type</option>
                     <option value='staff'>Staff</option>
                     <option value='admin'>Admin</option>
                 </select>
                 <input type="email" placeholder="Email Address">
                 <input type="password" placeholder="Password">
-                <button class="button_primary">Sign in</button>
+                <button class="button_primary" id="adminlogin">Sign in</button>
                 <p><a href="forgotpassword.html" >Forgot password</a></p>
             </form>
         </section>
         <footer>
             <p>Andela Developer Challenge ©️ 2019 :::: Made with ❤️ by <a href="https://github.com/allebd" target="_blank">allebd</a></p>
         </footer>
-    <div>
+    <div>    
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>
