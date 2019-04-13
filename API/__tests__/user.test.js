@@ -7,7 +7,7 @@ const API_VERSION = '/api/v1';
 const testUser = {
   firstName: 'dele',
   lastName: 'bella',
-  email: 'test@test.com',
+  email: 'test@tester.com',
   password: 'password',
   confirmPassword: 'password',
 };
@@ -34,7 +34,7 @@ describe('Testing User Controller', () => {
           expect(response.body.data).to.have.property('lastName');
           expect(response.body.data).to.have.property('email');
           expect(response.body.data.token).to.be.a('string');
-          expect(response.body.data.email).to.equal('test@test.com');
+          expect(response.body.data.email).to.equal('test@tester.com');
           done();
         });
     });
