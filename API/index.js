@@ -1,20 +1,11 @@
-import express from 'express';
+import Debug from 'debug';
+import dotenv from 'dotenv';
+import app from './app';
 
-// setup express application
-const app = express();
+dotenv.config();
 
-// setup PORT to be used
-const { PORT = 5000 } = process.env;
-
-// Parse incoming requests data
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-app.get('/', (req, res) => {
-  res.send('The API is working');
-});
-
+const debug = Debug('http');
+const { PORT = 5000 } = process.env; // setup PORT to be used
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Server is running on PORT ${PORT}`);
+  debug(`Server is running on PORT ${PORT}`);
 });
