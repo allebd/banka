@@ -18,10 +18,25 @@ const helpers = {
   },
 
   /**
+   * @description - generates a new account number
+   * @param {object} data
+   * @returns {int} accountNumber
+   */
+  generateAccountNumber(data) {
+    const newAccountNumber = Math.floor(Math.random() * 9000000) + 2550000000;
+    const foundAccount = data.find(eachData => eachData.accountNumber === newAccountNumber);
+    if (!foundAccount) {
+      return newAccountNumber;
+    }
+    return 0;
+  },
+
+  /**
    * @description - encypt password
    * @param {object} password
    * @returns {object} hashPassword
    */
+
   hashPassword(password) {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
@@ -49,6 +64,7 @@ const helpers = {
     });
     return token;
   },
+
   /**
    * @description - search by email
    * @param {string} email
@@ -59,6 +75,7 @@ const helpers = {
     const foundEmail = data.find(eachData => eachData.email === searchEmail);
     return foundEmail;
   },
+
   /**
    * @description - search by id
    * @param {string} id
@@ -66,9 +83,10 @@ const helpers = {
    * @returns {object} foundId
    */
   searchById(searchId, data) {
-    const foundId = data.find(eachData => eachData.email === searchId);
+    const foundId = data.find(eachData => eachData.id === searchId);
     return foundId;
   },
+
   /**
    * @description - validates email
    * @param {string} emaIl;

@@ -88,7 +88,7 @@ class UserController {
 
     const token = utils.jwtToken(userData);
 
-    response.status(201).json({
+    response.header('Authorization', `${token}`).status(201).json({
       status: statusCodes.created,
       data: {
         token,
@@ -99,6 +99,15 @@ class UserController {
       },
     });
   }
+
+  /**
+   * logs a user in
+   * @param {object} request express request object
+   * @param {object} response express response object
+   *
+   * @returns {json} json
+   * @memberof UserController
+   */
 
   static signin(request, response) {
     const { email, password } = request.body;
@@ -142,7 +151,7 @@ class UserController {
     if (storedUser) {
       if (utils.validatePassword(userData.password, storedUser.password)) {
         const token = utils.jwtToken(storedUser);
-        return response.status(200).json({
+        return response.header('Authorization', `${token}`).status(200).json({
           status: statusCodes.success,
           data: {
             token,

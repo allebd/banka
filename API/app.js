@@ -12,8 +12,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/', (req, res) => {
-  res.status(200).send('The API is working');
+app.get('/', (request, response) => {
+  response.status(200).send('The API is working');
 });
 
 route(app);
