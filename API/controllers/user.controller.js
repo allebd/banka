@@ -100,6 +100,67 @@ class UserController {
     });
   }
 
+  static signin(request, response) {
+    const { email, password } = request.body;
+    if (!email || email.trim().length === 0) {
+      return response.status(400).json({
+        status: statusCodes.badRequest,
+        error: 'Email is required',
+      });
+    }
+
+    if (email) {
+      const isValid = utils.emailValidator(email);
+      if (!isValid) {
+        return response.status(400).json({
+          status: statusCodes.badRequest,
+          error: 'Invalid email address',
+        });
+      }
+    }
+
+    if (!password || password.trim().length === 0) {
+      return response.status(400).json({
+        status: statusCodes.badRequest,
+        error: 'Password is required',
+      });
+    }
+
+    const userData = {
+      email,
+      password,
+    };
+
+    const storedUser = utils.searchByEmail(email, dummy.users);
+    if (!storedUser) {
+      return response.status(400).json({
+        status: statusCodes.badRequest,
+        error: 'Invalid login details, email or password is wrong',
+      });
+    }
+
+    if (storedUser) {
+      if (utils.validatePassword(userData.password, storedUser.password)) {
+        const token = utils.jwtToken(storedUser);
+        return response.status(200).json({
+          status: statusCodes.success,
+          data: {
+            token,
+            id: storedUser.id,
+            firstName: storedUser.firstName,
+            lastName: storedUser.lastName,
+            email: storedUser.email,
+          },
+        });
+      }
+    }
+
+    return response.status(400).json({
+      status: statusCodes.badRequest,
+      error: 'Invalid login details, email or password is wrong',
+    });
+  }
+
   static invalidUserRequest(request, response) {
     return response.status(400).json({
       status: statusCodes.badRequest,

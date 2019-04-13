@@ -20,12 +20,22 @@ const helpers = {
   /**
    * @description - encypt password
    * @param {object} password
-   * @returns {object} hashpassword
+   * @returns {object} hashPassword
    */
   hashPassword(password) {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
     return hashedPassword;
+  },
+
+  /**
+   * @description - validate password
+   * @param {string} password
+   * @param {string} hashPassword
+   * @returns {boolean} boolean
+   */
+  validatePassword(password, hashPassword) {
+    return bcrypt.compareSync(password, hashPassword);
   },
 
   /**
