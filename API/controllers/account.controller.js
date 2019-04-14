@@ -115,6 +115,34 @@ class AccountController {
     });
   }
 
+  /**
+   * Delete account
+   * @param {object} request express request object
+   * @param {object} response express response object
+   *
+   * @returns {json} json
+   * @memberof AccountController
+   */
+  // eslint-disable-next-line consistent-return
+  static deleteAccount(request, response) {
+    let { accountNumber } = request.params;
+    accountNumber = parseInt(accountNumber, 10);
+
+    const foundAccount = utils.searchByAccount(accountNumber, dummy.account);
+
+    if (!foundAccount) {
+      return response.status(400).json({
+        status: statusCodes.badRequest,
+        error: 'Account number does not exists',
+      });
+    }
+
+    const index = dummy.account.indexOf(foundAccount);
+
+    dummy.account.splice(index, 1);
+    response.status(200).send({ status: statusCodes.success, message: 'Account successfully deleted' });
+  }
+
   static invalidAccountRequest(request, response) {
     return response.status(400).json({
       status: statusCodes.badRequest,
