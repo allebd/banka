@@ -11,6 +11,8 @@ const route = (app) => {
   app.all(`${API_VERSION}/auth/signin`, userController.invalidUserRequest);
   app.post(`${API_VERSION}/accounts`, authenticate, accountController.createAccount);
   app.all(`${API_VERSION}/accounts`, authenticate, accountController.createAccount);
+  app.patch(`${API_VERSION}/accounts/:accountNumber`, authenticate, accountController.changeAccountStatus);
+  app.all(`${API_VERSION}/accounts/:accountNumber`, authenticate, accountController.changeAccountStatus);
 };
 
 export default route;
