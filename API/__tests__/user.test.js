@@ -5,6 +5,7 @@ import app from '../app';
 chai.use(chaiHttp);
 const API_VERSION = '/api/v1';
 const testUser = {
+  id: 67,
   firstName: 'dele',
   lastName: 'bella',
   email: 'test@tester.com',
