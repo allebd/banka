@@ -9,6 +9,7 @@ chai.use(chaiHttp);
 
 const API_VERSION = '/api/v1';
 const testUser = {
+  id: 89,
   firstName: 'dele',
   lastName: 'bella',
   email: 'test@test.com',
