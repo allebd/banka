@@ -12,6 +12,7 @@ const route = (app) => {
   app.patch(`${API_VERSION}/accounts/:accountNumber`, authenticate, accountController.changeAccountStatus);
   app.delete(`${API_VERSION}/accounts/:accountNumber`, authenticate, accountController.deleteAccount);
   app.post(`${API_VERSION}/transactions/:accountNumber/credit`, authenticate, transactionController.creditAccount);
+  app.post(`${API_VERSION}/transactions/:accountNumber/debit`, authenticate, transactionController.debitAccount);
 };
 
 export default route;

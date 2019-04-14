@@ -132,4 +132,117 @@ describe('Testing Transaction Controller', () => {
         });
     });
   });
+
+  describe('Testing debit account controller', () => {
+    /**
+       * Test the POST /transactions/<account-number>/debit endpoint
+       */
+    const transactionUrl = `${API_VERSION}/transactions/${accountNumber}/debit`;
+
+    it('should not create account when authorization is undefined', (done) => {
+      chai.request(app)
+        .post(transactionUrl)
+        .send({})
+        .end((error, response) => {
+          // eslint-disable-next-line no-unused-expressions
+          expect(response.headers.authorization).to.be.undefined;
+          done();
+        });
+    });
+
+    it('should not credit account when authorization token is invalid', (done) => {
+      chai.request(app)
+        .post(transactionUrl)
+        .set('Authorization', '555555')
+        .send(transactionUser)
+        .end((error, response) => {
+          expect(response).to.have.status(401);
+          expect(response.body.status).to.equal(401);
+          expect(response.body.error).to.equal('Invalid token!');
+          done();
+        });
+    });
+
+    it('should debit account when all the parameters are given', (done) => {
+      chai.request(app)
+        .post(transactionUrl)
+        .set('Authorization', userToken)
+        .send(transactionUser)
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response).to.have.status(200);
+          expect(response.body.status).to.equal(200);
+          expect(response.body.data).to.be.a('object');
+          expect(response.body.data).to.have.property('transactionId');
+          expect(response.body.data).to.have.property('accountNumber');
+          expect(response.body.data).to.have.property('amount');
+          expect(response.body.data).to.have.property('cashier');
+          expect(response.body.data).to.have.property('transactionType');
+          expect(response.body.data).to.have.property('accountBalance');
+          done();
+        });
+    });
+
+    it('should not debit account when the amount is zero', (done) => {
+      chai.request(app)
+        .post(transactionUrl)
+        .set('Authorization', userToken)
+        .send({
+          amount: 0,
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('Amount is too low');
+          done();
+        });
+    });
+
+    it('should not debit account when the amount is less than zero', (done) => {
+      chai.request(app)
+        .post(transactionUrl)
+        .set('Authorization', userToken)
+        .send({
+          amount: -20,
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('Amount is too low');
+          done();
+        });
+    });
+
+    it('should not debit account when the amount is greater than the balance', (done) => {
+      chai.request(app)
+        .post(transactionUrl)
+        .set('Authorization', userToken)
+        .send({
+          amount: 30000000,
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('Insufficients Funds');
+          done();
+        });
+    });
+
+    it('should not debit account when the account number does not exist', (done) => {
+      chai.request(app)
+        .post(`${API_VERSION}/transactions/xxyyzz/debit`)
+        .send(transactionUser)
+        .set('Authorization', userToken)
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('Account number does not exists');
+          done();
+        });
+    });
+  });
 });
