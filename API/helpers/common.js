@@ -78,7 +78,7 @@ const helpers = {
 
   /**
    * @description - search by id
-   * @param {string} id
+   * @param {int} id
    * @param {object} data
    * @returns {object} foundId
    */
@@ -87,6 +87,16 @@ const helpers = {
     return foundId;
   },
 
+  /**
+   * @description - search by account number
+   * @param {int} accountNumber
+   * @param {object} data
+   * @returns {object} foundAccount
+   */
+  searchByAccount(searchAccount, data) {
+    const foundAccount = data.find(eachData => eachData.accountNumber === searchAccount);
+    return foundAccount;
+  },
   /**
    * @description - validates email
    * @param {string} emaIl;

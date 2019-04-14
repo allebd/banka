@@ -117,4 +117,88 @@ describe('Testing Accounts Controller', () => {
         });
     });
   });
+
+  /**
+     * Test the PATCH /accounts/:accountNumber endpoint
+     */
+  describe('Change of status by activating or deactivating the accounts of account holders', () => {
+    let accountNumber = 2039939293;
+    let accountbody = { status: 'activate' };
+
+    it('should activate a user bank account', (done) => {
+      chai.request(app)
+        .patch(`${API_VERSION}/accounts/${accountNumber}`)
+        .set('Authorization', userToken)
+        .send(accountbody)
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(200);
+          expect(response.body.data).to.have.property('accountNumber');
+          expect(response.body.data.accountNumber).to.equal(accountNumber);
+          expect(response.body.data.status).to.equal(accountbody.status);
+          done();
+        });
+    });
+
+    it('should deactivate a user bank account', (done) => {
+      accountbody = { status: 'deactivate' };
+      chai.request(app)
+        .patch(`${API_VERSION}/accounts/${accountNumber}`)
+        .set('Authorization', userToken)
+        .send(accountbody)
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(200);
+          expect(response.body.data).to.have.property('accountNumber');
+          expect(response.body.data.accountNumber).to.equal(accountNumber);
+          expect(response.body.data.status).to.equal(accountbody.status);
+          done();
+        });
+    });
+
+    it('should not change status when account number is wrong', (done) => {
+      accountNumber = 2220108723333;
+      chai.request(app)
+        .patch(`${API_VERSION}/accounts/${accountNumber}`)
+        .set('Authorization', userToken)
+        .send(accountbody)
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('Account number does not exists');
+          done();
+        });
+    });
+
+    it('should have account status deactivated or activated not otherwise', (done) => {
+      accountbody = { status: 'validate' };
+      chai.request(app)
+        .patch(`${API_VERSION}/accounts/${accountNumber}`)
+        .set('Authorization', userToken)
+        .send(accountbody)
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('Wrong status selected');
+          done();
+        });
+    });
+
+    it('should not have an empty status selected', (done) => {
+      accountbody = { status: '' };
+      chai.request(app)
+        .patch(`${API_VERSION}/accounts/${accountNumber}`)
+        .set('Authorization', userToken)
+        .send(accountbody)
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('No status selected');
+          done();
+        });
+    });
+  });
 });
