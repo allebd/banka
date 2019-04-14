@@ -1,5 +1,7 @@
 # Banka
 
+[![Build Status](https://travis-ci.org/allebd/banka.svg?branch=develop)](https://travis-ci.org/allebd/banka) [![Coverage Status](https://coveralls.io/repos/github/allebd/banka/badge.svg?branch=develop)](https://coveralls.io/github/allebd/banka?branch=develop) [![Maintainability](https://api.codeclimate.com/v1/badges/633cf1e27f31ec002c9a/maintainability)](https://codeclimate.com/github/allebd/banka/maintainability)
+
 ## Table of Contents
 
 * [About](#about)
