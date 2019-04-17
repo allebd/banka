@@ -1,6 +1,6 @@
 import chaiHttp from 'chai-http';
 import chai, { expect } from 'chai';
-import app from '../app';
+import app from '../server';
 
 chai.use(chaiHttp);
 const API_VERSION = '/api/v1';
@@ -239,6 +239,22 @@ describe('Testing User Controller', () => {
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
           expect(response.body.error).to.equal('Invalid login details, email or password is wrong');
+          done();
+        });
+    });
+
+    it('should not login a user when the email is invalid', (done) => {
+      chai.request(app)
+        .post(signinUrl)
+        .send({
+          email: 'wrongemailgmailcom',
+          password: 'password',
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('Invalid email address');
           done();
         });
     });

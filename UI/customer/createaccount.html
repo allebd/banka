@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>💰 Banka :::: Create Account</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/main.css">
-    <!-- <script src="main.js"></script> -->
+    <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/formbox.css">
 </head>
 <body>
     <div class="container title-bar">
+        <!-- Title bar -->
         <div class="banner">
             <header>
                 <div class="branding">
@@ -17,19 +17,21 @@
                 </div>
                 <nav>
                     <ul>
-                        <li><a href="./createaccount.html"  class="button_primary">Create Account</a></li>
-                        <li><a href="./adminsettings.html" >Steve Jobs</a></li>
-                        <li><a href="../index.html" >Logout</a></li>
+                        <li><a href="../customer/accounts.html"  class="button_primary">Bank Accounts</a></li>
+                        <li><a href="../customer/settings.html" >James Bond</a></li>
+                        <li><a href="./login.html" >Logout</a></li>
                     </ul>
                 </nav>
             </header>
         </div>
+        <!-- End of title bar -->
+        <!-- Create Account form -->
         <section id='form-box'>
             <form action="accounts.html">                
                 <h1>Create Account</h1>                
                 <label>Select your preferred account type</label>
-                <select name="" id="">
-                    <option selected disabled>Account Type</option>
+                <select name="" id="" required>
+                    <option disabled>Account Type</option>
                     <option value='savings'>Savings</option>
                     <option value='current'>Current</option>
                 </select>
@@ -37,9 +39,12 @@
                 <p><a href="accounts.html">Click to view all accounts</a></p>
             </form>
         </section>
+        <!-- End of Create Account form -->
+        <!-- Footer -->
         <footer>
             <p>Andela Developer Challenge ©️ 2019 :::: Made with ❤️ by <a href="https://github.com/allebd" target="_blank">allebd</a></p>
         </footer>
+        <!-- End of footer -->
     <div>
 </body>
 </html>

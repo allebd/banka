@@ -1,7 +1,7 @@
 import chaiHttp from 'chai-http';
 import chai, { expect } from 'chai';
 import jwt from 'jsonwebtoken';
-import app from '../app';
+import app from '../server';
 
 const { SECRET } = process.env;
 

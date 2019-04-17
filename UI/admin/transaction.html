@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>💰 Banka :::: Transaction</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/main.css">
-    <!-- <script src="main.js"></script> -->
+    <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/formbox.css">
 </head>
 <body>
     <div class="container title-bar">
+        <!-- Title bar -->
         <div class="banner">
             <header>
                 <div class="branding">
@@ -24,23 +24,28 @@
                 </nav>
             </header>
         </div>
+        <!-- End of title bar -->
+        <!-- Credit and Debit form -->
         <section id='form-box'>
             <form action="staffdashboard.html">                
                 <h1>Credit/Debit Account</h1>      
-                <select name="" id="">
-                    <option selected disabled>Select Type</option>
+                <select name="" id="" required>
+                    <option disabled>Select Type</option>
                     <option value='credit'>Credit</option>
                     <option value='debit'>Debit</option>
                 </select>
-                <input type="text" placeholder="Account Number">
-                <input type="text" placeholder="Amount">
+                <input type="number" placeholder="Account Number" required>
+                <input type="number" placeholder="Amount" required>
                 <button class="button_primary">Submit</button>
                 <p><a href="staffdashboard.html">Click to view all accounts</a></p>
             </form>
         </section>
+        <!-- End of credit and debit form -->
+        <!-- Footer -->
         <footer>
             <p>Andela Developer Challenge ©️ 2019 :::: Made with ❤️ by <a href="https://github.com/allebd" target="_blank">allebd</a></p>
         </footer>
+        <!-- End of footer -->
     <div>
 </body>
 </html>

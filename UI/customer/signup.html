@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>💰 Banka :::: Sign Up</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/main.css">
-    <!-- <script src="main.js"></script> -->
+    <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/formbox.css">
 </head>
 <body>
     <div class="container title-bar">
+        <!-- Title bar -->
         <div class="banner">
             <header>
                 <div class="branding">
@@ -23,21 +23,26 @@
                 </nav>
             </header>
         </div>
+        <!-- End of title bar -->
+        <!-- Registration form -->
         <section id='form-box'>
-            <form action="login.html">                
+            <form action="login.html">
                 <h1>Register</h1>
-                <input type="text" placeholder="First Name">
-                <input type="text" placeholder="Last Name">
-                <input type="email" placeholder="Email Address">
-                <input type="password" placeholder="Password">
-                <input type="password" placeholder="Confirm Password">
-                <button class="button_primary">Sign up</button>
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="password" placeholder="Password" required>
+                <input type="password" placeholder="Confirm Password" required>
+                <button class="button_primary" id="signUp">Sign up</button>
                 <p>Already registered? <a href="login.html">Click here to login</a></p>
             </form>
         </section>
+        <!-- End of registration form -->
+        <!-- Footer -->
         <footer>
             <p>Andela Developer Challenge ©️ 2019 :::: Made with ❤️ by <a href="https://github.com/allebd" target="_blank">allebd</a></p>
         </footer>
+        <!-- End of footer -->
     <div>
 </body>
 </html>

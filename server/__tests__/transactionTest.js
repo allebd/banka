@@ -1,7 +1,7 @@
 import chaiHttp from 'chai-http';
 import chai, { expect } from 'chai';
 import jwt from 'jsonwebtoken';
-import app from '../app';
+import app from '../server';
 
 const { SECRET } = process.env;
 
@@ -195,6 +195,22 @@ describe('Testing Transaction Controller', () => {
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
           expect(response.body.error).to.equal('Amount is too low');
+          done();
+        });
+    });
+
+    it('should not debit account when the amount is null', (done) => {
+      chai.request(app)
+        .post(transactionUrl)
+        .set('Authorization', userToken)
+        .send({
+          amount: null,
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('No amount entered');
           done();
         });
     });

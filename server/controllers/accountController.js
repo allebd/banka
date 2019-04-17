@@ -23,27 +23,6 @@ class AccountController {
       id, firstName, lastName, email,
     } = request.decode;
 
-    if (!type || type.trim().length === 0) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'No account type selected',
-      });
-    }
-
-    if (type !== 'savings' && type !== 'current') {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'Account Type must be either savings or current',
-      });
-    }
-
-    if (!utils.generateAccountNumber(dummy.account)) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'Account could not be created',
-      });
-    }
-
     const accountData = {
       id: utils.getNextId(dummy.account),
       accountNumber: utils.generateAccountNumber(dummy.account),
@@ -83,20 +62,6 @@ class AccountController {
     accountNumber = parseInt(accountNumber, 10);
 
     const foundAccount = utils.searchByAccount(accountNumber, dummy.account);
-
-    if (!status || status.trim().length === 0) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'No status selected',
-      });
-    }
-
-    if (status !== 'activate' && status !== 'deactivate') {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'Wrong status selected',
-      });
-    }
 
     if (!foundAccount) {
       return response.status(400).json({
@@ -141,13 +106,6 @@ class AccountController {
 
     dummy.account.splice(index, 1);
     response.status(200).send({ status: statusCodes.success, message: 'Account successfully deleted' });
-  }
-
-  static invalidAccountRequest(request, response) {
-    return response.status(400).json({
-      status: statusCodes.badRequest,
-      error: 'Request is not valid',
-    });
   }
 }
 
