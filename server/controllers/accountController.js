@@ -65,7 +65,7 @@ class AccountController {
 
     if (!foundAccount) {
       return response.status(400).json({
-        status: statusCodes.notFound,
+        status: statusCodes.badRequest,
         error: 'Account number does not exists',
       });
     }
@@ -96,7 +96,7 @@ class AccountController {
     const foundAccount = utils.searchByAccount(accountNumber, dummy.account);
 
     if (!foundAccount) {
-      return response.status(400).json({
+      return response.status(404).json({
         status: statusCodes.notFound,
         error: 'Account number does not exists',
       });
