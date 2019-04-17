@@ -230,7 +230,7 @@ describe('Testing Accounts Controller', () => {
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');
-          expect(response.body.status).to.equal(404);
+          expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
           expect(response.body.error).to.equal('Account number does not exists');
           done();
