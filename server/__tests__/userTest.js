@@ -236,7 +236,7 @@ describe('Testing User Controller', () => {
         })
         .end((error, response) => {
           expect(response.body).to.be.an('object');
-          expect(response.body.status).to.equal(400);
+          expect(response.body.status).to.equal(401);
           expect(response.body.error).to.be.a('string');
           expect(response.body.error).to.equal('Invalid login details, email or password is wrong');
           done();
