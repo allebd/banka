@@ -89,8 +89,8 @@ class UserController {
       }
     }
 
-    return response.status(400).json({
-      status: statusCodes.badRequest,
+    return response.status(401).json({
+      status: statusCodes.unAuthorized,
       error: 'Invalid login details, email or password is wrong',
     });
   }
