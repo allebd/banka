@@ -1,7 +1,7 @@
 import chaiHttp from 'chai-http';
 import chai, { expect } from 'chai';
 import jwt from 'jsonwebtoken';
-import app from '../app';
+import app from '../server';
 
 const { SECRET } = process.env;
 
@@ -165,7 +165,7 @@ describe('Testing Accounts Controller', () => {
         .send(accountbody)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
-          expect(response.body.status).to.equal(400);
+          expect(response.body.status).to.equal(404);
           expect(response.body.error).to.be.a('string');
           expect(response.body.error).to.equal('Account number does not exists');
           done();
@@ -230,7 +230,7 @@ describe('Testing Accounts Controller', () => {
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');
-          expect(response.body.status).to.equal(400);
+          expect(response.body.status).to.equal(404);
           expect(response.body.error).to.be.a('string');
           expect(response.body.error).to.equal('Account number does not exists');
           done();

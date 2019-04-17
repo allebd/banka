@@ -2,11 +2,12 @@
   "name": "banka",
   "version": "1.0.0",
   "description": "Banka is a light-weight core banking application that powers banking operations like account creation, customer deposit and withdrawals.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon --exec babel-node ./API",
-    "test": "nyc mocha ./API/__tests__/*.js --require @babel/register --exit",
-    "start:dev": "set DEBUG=http & nodemon --exec babel-node ./API",
+    "start": "npm run build && node dist/server.js",
+    "build": "babel server -d dist",
+    "test": "nyc mocha ./server/__tests__/*.js --require @babel/register --exit",
+    "start:dev": "set DEBUG=http & nodemon --exec babel-node ./server/server.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {

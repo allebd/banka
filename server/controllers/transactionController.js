@@ -26,20 +26,6 @@ class TransactionController {
 
     const foundAccount = utils.searchByAccount(accountNumber, dummy.account);
 
-    if (amount === undefined || amount === '' || amount === null) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'No amount entered',
-      });
-    }
-
-    if (amount === 0 || amount < 0) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'Amount is too low',
-      });
-    }
-
     if (!foundAccount) {
       return response.status(400).json({
         status: statusCodes.badRequest,
@@ -91,20 +77,6 @@ class TransactionController {
     amount = parseFloat(amount);
 
     const foundAccount = utils.searchByAccount(accountNumber, dummy.account);
-
-    if (amount === undefined || amount === '' || amount === null) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'No amount entered',
-      });
-    }
-
-    if (amount === 0 || amount < 0) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'Amount is too low',
-      });
-    }
 
     if (!foundAccount) {
       return response.status(400).json({
