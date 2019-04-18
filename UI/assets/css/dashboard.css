@@ -1,4 +1,14 @@
-:root {
+/*
+ * dashboard.css 
+ * 
+ * Banka - Andela Developer Challenge ©️ 2019
+ * Andela Developer Challenge ©️ 2019
+ * https://allebd.github.io/banka/UI/
+ *
+ * CSS Designed by Bella Oyedele.
+ */
+
+ :root {
     --background: #f4f4f4;
     --white: #ffffff;
     --black: #000000;
@@ -53,7 +63,8 @@ ul li{
 }
 
 .button_primary, .button_secondary, .button_success, .button_danger{
-    height: 35px;
+    margin: 5px 0;
+    height: 33px;
     background: var(--accent-yellow);
     border: 0;
     padding-left: 20px;
@@ -67,10 +78,12 @@ ul li{
 
 .button_success{
     background: var(--success-green);
+    width: 105px;
 }
 
 .button_danger{
     background: var(--danger-red);
+    width: 105px;
 }
 
 /**** Home ****/
@@ -134,38 +147,6 @@ nav ul li a{
     padding: 0.7em;
 }
 
-/* Features */
-#features{
-    grid-area: features;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    justify-items: center;
-    text-align: center;
-}
-
-.feature-title{
-    grid-column: 1/4;
-    width: 45%;
-    margin: 2em;   
-}
-
-.feature-title h1, #form-box form h1{
-    font-size: 2em;
-    font-weight: 100;
-}
-
-.feature{
-    width:50%;
-}
-
-.feature1{
-    justify-self: end;
-}
-
-.feature3{
-    justify-self: start;
-}
-
 /* Footer */
 footer{
     grid-area: footer;
@@ -195,23 +176,6 @@ footer a{
 #form-box form{
     grid-area: form-box;
     justify-self: center;
-}
-
-#form-box label.label-box{
-    text-align: center;
-    width: 100%;
-    display: block;
-    /* display: block;
-    width: auto;
-    float:left;
-    margin-right:10px;
-    padding:5px 0; */
-}
-
-#form-box input, #form-box button, #form-box select{    
-    width: 80%;
-    padding: 8px;
-    margin-top: 1em;
 }
 
 #form-box form a{
@@ -424,26 +388,6 @@ footer a{
 }
 
 @media(max-width: 900px){
-    #features{
-        grid-template-columns: 1fr;
-    }
-
-    .feature-title{
-        grid-column: 1/1;
-    }
-
-    .feature{
-        width:50%;
-    }
-    
-    .feature1{
-        justify-self: center;
-    }
-    
-    .feature3{
-        justify-self: center;
-    }
-
     .full-table table{
         width: 200%;
     }

@@ -5,10 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>💰 Banka :::: Administrator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/main.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="../assets/css/formbox.css">
 </head>
 <body>
     <div class="container title-bar">
+        <!-- Title bar -->
         <div class="banner">
             <header>
                 <div class="branding">
@@ -22,23 +23,30 @@
                 </nav>
             </header>
         </div>
+        <!-- End of title bar -->
+        <!-- Login form -->
         <section id='form-box'>
-            <form action="staffdashboard.html">                
-                <h1>Administrator Login</h1>
-                <select name="" id="adminrole">
-                    <option selected disabled>Select Type</option>
+            <form action="staffdashboard.html">
+                <h1>Administrator Login</h1>                
+                <div class="alert">
+                </div>                
+                <select name="" id="adminrole" required>
+                    <option disabled>Select Type</option>
                     <option value='staff'>Staff</option>
                     <option value='admin'>Admin</option>
                 </select>
-                <input type="email" placeholder="Email Address">
-                <input type="password" placeholder="Password">
+                <input type="email" placeholder="Email Address" id="adminemail" required>
+                <input type="password" placeholder="Password" id="adminpass" required>
                 <button class="button_primary" id="adminlogin">Sign in</button>
                 <p><a href="forgotpassword.html" >Forgot password</a></p>
             </form>
         </section>
+        <!-- End of login form -->
+        <!-- Footer -->
         <footer>
             <p>Andela Developer Challenge ©️ 2019 :::: Made with ❤️ by <a href="https://github.com/allebd" target="_blank">allebd</a></p>
         </footer>
+        <!-- End of footer -->
     <div>    
     <script src="../assets/js/main.js"></script>
 </body>
