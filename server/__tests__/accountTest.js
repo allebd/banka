@@ -157,7 +157,7 @@ describe('Testing Accounts Controller', () => {
         });
     });
 
-    it('should not change status when account number is wrong', (done) => {
+    it('should not change status when account number is wrong or does not exist', (done) => {
       accountNumber = 2220108723333;
       chai.request(app)
         .patch(`${API_VERSION}/accounts/${accountNumber}`)
@@ -167,12 +167,12 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(404);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Account number does not exists');
+          expect(response.body.error).to.equal('Account number does not exist');
           done();
         });
     });
 
-    it('should have account status deactivated or activated not otherwise', (done) => {
+    it('should not change status when the wrong request is sent', (done) => {
       accountbody = { status: 'validate' };
       chai.request(app)
         .patch(`${API_VERSION}/accounts/${accountNumber}`)
@@ -182,7 +182,7 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Wrong status selected');
+          expect(response.body.error).to.equal('Invalid request sent');
           done();
         });
     });
@@ -197,7 +197,7 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('No status selected');
+          expect(response.body.error).to.equal('No request sent');
           done();
         });
     });
@@ -232,7 +232,7 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(404);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Account number does not exists');
+          expect(response.body.error).to.equal('Account number does not exist');
           done();
         });
     });

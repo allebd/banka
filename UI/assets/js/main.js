@@ -7,8 +7,29 @@ const positiveActivate = document.getElementById('positiveActivate');
 const negativeActivate = document.getElementById('negativeActivate');
 const positiveDeactivate = document.getElementById('positiveDeactivate');
 const negativeDeactivate = document.getElementById('negativeDeactivate');
+const inputField = document.querySelector('input[required]');
+const selectField = document.querySelector('select[required]');
+const actionButton = document.querySelector('button');
 const alertMessage = document.querySelector('.alert');
 
+// Close alert box
+document.addEventListener('click', (event) => {
+  if (event.target && event.target.id === 'alert-close') {
+    alertMessage.innerHTML = '';
+  }
+});
+
+// Empty Field Verification
+if (actionButton) {
+  actionButton.addEventListener('click', (event) => {
+    if ((inputField && inputField.value.trim('') === '') || (selectField && selectField.value.trim('') === '')) {
+      event.preventDefault();
+      alertMessage.innerHTML = "<div class='alert-message alert-error'><p> Kindly complete all fields accordingly.</a></p><div id='alert-close'>x</div></div>";
+    }
+  });
+}
+
+//
 if (adminlogin) {
   adminlogin.addEventListener('click', (event) => {
     event.preventDefault();
@@ -23,8 +44,7 @@ if (adminlogin) {
         window.location.href = 'admindashboard.html';
       }
     } else {
-      alertMessage.innerHTML = "<div class='alert-message alert-error'><p> Incorrect email or password, kindly try again.</a></p</div>";
-      setTimeout(() => { alertMessage.innerHTML = ''; }, 5000);
+      alertMessage.innerHTML = "<div class='alert-message alert-error'><p> Incorrect email or password, kindly try again.</a></p><div id='alert-close'>x</div></div>";
     }
   });
 }

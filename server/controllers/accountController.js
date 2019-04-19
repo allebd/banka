@@ -66,7 +66,7 @@ class AccountController {
     if (!foundAccount) {
       return response.status(404).json({
         status: statusCodes.notFound,
-        error: 'Account number does not exists',
+        error: 'Account number does not exist',
       });
     }
     foundAccount.status = status;
@@ -98,7 +98,7 @@ class AccountController {
     if (!foundAccount) {
       return response.status(404).json({
         status: statusCodes.notFound,
-        error: 'Account number does not exists',
+        error: 'Account number does not exist',
       });
     }
 

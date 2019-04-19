@@ -27,9 +27,9 @@ class TransactionController {
     const foundAccount = utils.searchByAccount(accountNumber, dummy.account);
 
     if (!foundAccount) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'Account number does not exists',
+      return response.status(404).json({
+        status: statusCodes.notFound,
+        error: 'Account number does not exist',
       });
     }
 
@@ -79,9 +79,9 @@ class TransactionController {
     const foundAccount = utils.searchByAccount(accountNumber, dummy.account);
 
     if (!foundAccount) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'Account number does not exists',
+      return response.status(404).json({
+        status: statusCodes.notFound,
+        error: 'Account number does not exist',
       });
     }
 
