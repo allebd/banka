@@ -28,11 +28,12 @@
         <section id='form-box'>
             <form action="login.html">
                 <h1>Register</h1>
-                <input type="text" placeholder="First Name" required>
-                <input type="text" placeholder="Last Name" required>
-                <input type="email" placeholder="Email Address" required>
-                <input type="password" placeholder="Password" required>
-                <input type="password" placeholder="Confirm Password" required>
+                <div class="alert"></div>
+                <input type="text" placeholder="First Name" minlength="4" required>
+                <input type="text" placeholder="Last Name" minlength="4" required>
+                <input type="email" placeholder="Email Address" minlength="4" required>
+                <input type="password" placeholder="Password" minlength="4" required>
+                <input type="password" placeholder="Confirm Password" minlength="4" required>
                 <button class="button_primary" id="signUp">Sign up</button>
                 <p>Already registered? <a href="login.html">Click here to login</a></p>
             </form>
@@ -44,5 +45,6 @@
         </footer>
         <!-- End of footer -->
     <div>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>
