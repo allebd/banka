@@ -180,15 +180,31 @@ footer a{
 .alert{
     width: 80%;
     line-height: 38px;
-    margin: auto;
-    text-align: center;    
+    margin: auto;   
     color: var(--white);
 }
 
-.alert-message{    
+.alert-message{
+    display: grid;
+    grid-template-columns: auto 1em; 
+    align-items: center;  
+    grid-gap: 5px;
     background: var(--accent-yellow);
     padding-left: 20px;
     padding-right: 20px;
+}
+
+#alert-close{
+    justify-self: end;
+    font-weight: bold;
+    font-size: 14px;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.alert-message p{
+    margin: 0px;
+    justify-self: start;
 }
 
 .alert-success{

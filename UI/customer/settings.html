@@ -29,11 +29,12 @@
         <section id='form-box'>
             <form action="settings.html">                
                 <h1>My Profile</h1>
+                <div class="alert"></div>
                 <img src="../assets/img/profile.png" alt="Profile picture">                
                 <input type="file" name="" id="" >
-                <input type="text" placeholder="First Name" value="James" required>
-                <input type="text" placeholder="Last Name" value="Bond" required>
-                <input type="email" placeholder="Email Address" value="jamesbond@gmail.com" required>
+                <input type="text" placeholder="First Name" value="James" minlength="4" required>
+                <input type="text" placeholder="Last Name" value="Bond" minlength="4" required>
+                <input type="email" placeholder="Email Address" value="jamesbond@gmail.com" minlength="4" required>
                 <input type="password" placeholder="Password" disabled>
                 <button class="button_primary">Update profile</button>
                 <p><a href="resetpassword.html">Click here to change password</a></p>
@@ -46,5 +47,6 @@
         </footer>
         <!-- End of footer -->
     <div>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>

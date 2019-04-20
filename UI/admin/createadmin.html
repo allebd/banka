@@ -28,17 +28,18 @@
         <!-- Create Administrator form -->
         <section id='form-box'>
             <form action="admindashboard.html">                
-                <h1>Create Administrator</h1>                
+                <h1>Create Administrator</h1>   
+                <div class="alert"></div>             
                 <select name="" id="" required>
                     <option disabled>Account Type</option>
                     <option value='staff'>Staff</option>
                     <option value='admin'>Admin</option>
                 </select>
-                <input type="text" placeholder="First Name" required>
-                <input type="text" placeholder="Last Name" required>
-                <input type="email" placeholder="Email Address" required>
-                <input type="password" placeholder="Password" required>
-                <input type="password" placeholder="Confirm Password" required>
+                <input type="text" placeholder="First Name" minlength="4" required>
+                <input type="text" placeholder="Last Name" minlength="4" required>
+                <input type="email" placeholder="Email Address" minlength="4" required>
+                <input type="password" placeholder="Password" minlength="4" required>
+                <input type="password" placeholder="Confirm Password" minlength="4" required>
                 <button class="button_primary">Create</button>
                 <p><a href="admindashboard.html">Click to view all accounts</a></p>
             </form>
@@ -50,5 +51,6 @@
         </footer>
         <!-- End of footer -->
     <div>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>
