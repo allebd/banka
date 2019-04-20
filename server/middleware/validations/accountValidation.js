@@ -34,14 +34,14 @@ class AccountValidate {
     if (!status || status.trim().length === 0) {
       return response.status(400).json({
         status: statusCodes.badRequest,
-        error: 'No status selected',
+        error: 'No request sent',
       });
     }
 
     if (status !== 'activate' && status !== 'deactivate') {
       return response.status(400).json({
         status: statusCodes.badRequest,
-        error: 'Wrong status selected',
+        error: 'Invalid request sent',
       });
     }
 
