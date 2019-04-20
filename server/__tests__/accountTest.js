@@ -128,7 +128,7 @@ describe('Testing Accounts Controller', () => {
 
     it('should activate a user bank account', (done) => {
       chai.request(app)
-        .patch(`${API_VERSION}/accounts/${accountNumber}`)
+        .patch(`${API_VERSION}/account/${accountNumber}`)
         .set('Authorization', userToken)
         .send(accountbody)
         .end((error, response) => {
@@ -144,7 +144,7 @@ describe('Testing Accounts Controller', () => {
     it('should deactivate a user bank account', (done) => {
       accountbody = { status: 'deactivate' };
       chai.request(app)
-        .patch(`${API_VERSION}/accounts/${accountNumber}`)
+        .patch(`${API_VERSION}/account/${accountNumber}`)
         .set('Authorization', userToken)
         .send(accountbody)
         .end((error, response) => {
@@ -160,7 +160,7 @@ describe('Testing Accounts Controller', () => {
     it('should not change status when account number is wrong or does not exist', (done) => {
       accountNumber = 2220108723333;
       chai.request(app)
-        .patch(`${API_VERSION}/accounts/${accountNumber}`)
+        .patch(`${API_VERSION}/account/${accountNumber}`)
         .set('Authorization', userToken)
         .send(accountbody)
         .end((error, response) => {
@@ -175,7 +175,7 @@ describe('Testing Accounts Controller', () => {
     it('should not change status when the wrong request is sent', (done) => {
       accountbody = { status: 'validate' };
       chai.request(app)
-        .patch(`${API_VERSION}/accounts/${accountNumber}`)
+        .patch(`${API_VERSION}/account/${accountNumber}`)
         .set('Authorization', userToken)
         .send(accountbody)
         .end((error, response) => {
@@ -190,7 +190,7 @@ describe('Testing Accounts Controller', () => {
     it('should not have an empty status selected', (done) => {
       accountbody = { status: '' };
       chai.request(app)
-        .patch(`${API_VERSION}/accounts/${accountNumber}`)
+        .patch(`${API_VERSION}/account/${accountNumber}`)
         .set('Authorization', userToken)
         .send(accountbody)
         .end((error, response) => {

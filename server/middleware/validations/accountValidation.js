@@ -8,19 +8,9 @@ class AccountValidate {
   static validateCreate(request, response, next) {
     const { type } = request.body;
 
-    if (!type || type.trim().length === 0) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'No account type selected',
-      });
-    }
+    if (!type || type.trim().length === 0) { return response.status(400).json({ status: statusCodes.badRequest, error: 'No account type selected' }); }
 
-    if (type !== 'savings' && type !== 'current') {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'Account Type must be either savings or current',
-      });
-    }
+    if (type !== 'savings' && type !== 'current') { return response.status(400).json({ status: statusCodes.badRequest, error: 'Account Type must be either savings or current' }); }
 
     next();
   }
@@ -31,19 +21,9 @@ class AccountValidate {
     let { accountNumber } = request.params;
     accountNumber = parseInt(accountNumber, 10);
 
-    if (!status || status.trim().length === 0) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'No request sent',
-      });
-    }
+    if (!status || status.trim().length === 0) { return response.status(400).json({ status: statusCodes.badRequest, error: 'No request sent' }); }
 
-    if (status !== 'activate' && status !== 'deactivate') {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'Invalid request sent',
-      });
-    }
+    if (status !== 'activate' && status !== 'deactivate') { return response.status(400).json({ status: statusCodes.badRequest, error: 'Invalid request sent' }); }
 
     next();
   }

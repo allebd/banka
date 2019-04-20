@@ -16,7 +16,6 @@ class TransactionController {
    * @memberof TransactionController
    */
 
-  // eslint-disable-next-line consistent-return
   static creditAccount(request, response) {
     let { amount } = request.body;
     let { accountNumber } = request.params;
@@ -25,13 +24,7 @@ class TransactionController {
     amount = parseFloat(amount);
 
     const foundAccount = utils.searchByAccount(accountNumber, dummy.account);
-
-    if (!foundAccount) {
-      return response.status(404).json({
-        status: statusCodes.notFound,
-        error: 'Account number does not exist',
-      });
-    }
+    if (!foundAccount) { return response.status(404).json({ status: statusCodes.notFound, error: 'Account number does not exist' }); }
 
     const transactionData = {
       id: utils.getNextId(dummy.transaction),
@@ -46,7 +39,7 @@ class TransactionController {
     dummy.transaction.push(transactionData);
     foundAccount.balance = transactionData.newBalance;
 
-    response.status(200).json({
+    return response.status(200).json({
       status: statusCodes.success,
       data: {
         transactionId: transactionData.id,
@@ -77,21 +70,10 @@ class TransactionController {
     amount = parseFloat(amount);
 
     const foundAccount = utils.searchByAccount(accountNumber, dummy.account);
-
-    if (!foundAccount) {
-      return response.status(404).json({
-        status: statusCodes.notFound,
-        error: 'Account number does not exist',
-      });
-    }
+    if (!foundAccount) { return response.status(404).json({ status: statusCodes.notFound, error: 'Account number does not exist' }); }
 
     const amountToBeLeft = parseFloat(foundAccount.balance) - parseFloat(amount);
-    if (amountToBeLeft <= 0) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'Insufficients Funds',
-      });
-    }
+    if (amountToBeLeft <= 0) { return response.status(400).json({ status: statusCodes.badRequest, error: 'Insufficients Funds' }); }
 
     const transactionData = {
       id: utils.getNextId(dummy.transaction),
@@ -106,7 +88,7 @@ class TransactionController {
     dummy.transaction.push(transactionData);
     foundAccount.balance = transactionData.newBalance;
 
-    response.status(200).json({
+    return response.status(200).json({
       status: statusCodes.success,
       data: {
         transactionId: transactionData.id,

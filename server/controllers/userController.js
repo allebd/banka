@@ -16,7 +16,6 @@ class UserController {
    * @memberof UserController
    */
 
-  // eslint-disable-next-line consistent-return
   static signup(request, response) {
     const {
       firstName, lastName, email, password,
@@ -43,7 +42,7 @@ class UserController {
 
     const token = utils.jwtToken(userData);
 
-    response.header('Authorization', `${token}`).status(201).json({
+    return response.header('Authorization', `${token}`).status(201).json({
       status: statusCodes.created,
       data: {
         token,
@@ -89,10 +88,7 @@ class UserController {
       }
     }
 
-    return response.status(401).json({
-      status: statusCodes.unAuthorized,
-      error: 'Invalid login details, email or password is wrong',
-    });
+    return response.status(401).json({ status: statusCodes.unAuthorized, error: 'Invalid login details, email or password is wrong' });
   }
 }
 

@@ -1,0 +1,3 @@
+exclude_patterns:
+- "UI/"
+- "server/__tests__/"
