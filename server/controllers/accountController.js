@@ -16,7 +16,6 @@ class AccountController {
    * @memberof AccountController
    */
 
-  // eslint-disable-next-line consistent-return
   static createAccount(request, response) {
     const { type } = request.body;
     const {
@@ -34,7 +33,7 @@ class AccountController {
     };
     dummy.account.push(accountData);
 
-    response.status(201).json({
+    return response.status(201).json({
       status: statusCodes.created,
       data: {
         accountNumber: accountData.accountNumber,
@@ -64,7 +63,7 @@ class AccountController {
     const foundAccount = utils.searchByAccount(accountNumber, dummy.account);
 
     if (!foundAccount) {
-      return response.status(404).json({
+      response.status(404).json({
         status: statusCodes.notFound,
         error: 'Account number does not exist',
       });
@@ -105,7 +104,7 @@ class AccountController {
     const index = dummy.account.indexOf(foundAccount);
 
     dummy.account.splice(index, 1);
-    response.status(200).send({ status: statusCodes.success, message: 'Account successfully deleted' });
+    return response.status(200).send({ status: statusCodes.success, message: 'Account successfully deleted' });
   }
 }
 
