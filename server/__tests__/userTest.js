@@ -28,14 +28,26 @@ describe('Testing User Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response).to.have.status(201);
           expect(response.body.status).to.equal(201);
-          expect(response.body.data).to.be.a('object');
-          expect(response.body.data).to.have.property('token');
-          expect(response.body.data).to.have.property('id');
-          expect(response.body.data).to.have.property('firstName');
-          expect(response.body.data).to.have.property('lastName');
-          expect(response.body.data).to.have.property('email');
-          expect(response.body.data.token).to.be.a('string');
-          expect(response.body.data.email).to.equal('test@tester.com');
+          expect(response.body.data).to.be.a('array');
+          expect(response.body.data[0]).to.have.property('token');
+          expect(response.body.data[0]).to.have.property('id');
+          expect(response.body.data[0]).to.have.property('firstName');
+          expect(response.body.data[0]).to.have.property('lastName');
+          expect(response.body.data[0]).to.have.property('email');
+          done();
+        });
+    });
+
+    it('should register a new user when the same email is used again', (done) => {
+      chai.request(app)
+        .post(signupUrl)
+        .send(testUser)
+
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('Email already exists');
           done();
         });
     });
@@ -133,25 +145,6 @@ describe('Testing User Controller', () => {
         });
     });
 
-    it('should not register a user when the email already exists', (done) => {
-      chai.request(app)
-        .post(signupUrl)
-        .send({
-          firstName: 'dele',
-          lastName: 'bella',
-          email: 'test@test.com',
-          password: 'password',
-          confirmPassword: 'password',
-        })
-        .end((error, response) => {
-          expect(response.body).to.be.an('object');
-          expect(response.body.status).to.equal(400);
-          expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Email already exists');
-          done();
-        });
-    });
-
     it('should not register a user when the email is not valid', (done) => {
       chai.request(app)
         .post(signupUrl)
@@ -184,14 +177,13 @@ describe('Testing User Controller', () => {
         .end((error, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(200);
-          expect(response.body.data).to.be.a('object');
-          expect(response.body.data).to.have.property('token');
-          expect(response.body.data).to.have.property('id');
-          expect(response.body.data).to.have.property('firstName');
-          expect(response.body.data).to.have.property('lastName');
-          expect(response.body.data).to.have.property('email');
-          expect(response.body.data.token).to.be.a('string');
-          expect(response.body.data.email).to.equal(testUser.email);
+          expect(response.body.data).to.be.a('array');
+          expect(response.body.data[0]).to.have.property('token');
+          expect(response.body.data[0]).to.have.property('id');
+          expect(response.body.data[0]).to.have.property('firstName');
+          expect(response.body.data[0]).to.have.property('lastName');
+          expect(response.body.data[0]).to.have.property('email');
+          expect(response.body.data[0].email).to.equal(testUser.email);
           done();
         });
     });

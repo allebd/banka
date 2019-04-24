@@ -12,15 +12,23 @@ const testUser = {
   id: 90,
   firstName: 'steve',
   lastName: 'cannon',
-  email: 'testing@testers.com',
+  email: 'testing@transaction.com',
   password: 'delapassword',
   confirmPassword: 'delapassword',
 };
+
+const jwtUser = {
+  id: 90,
+  email: 'testing@transaction.com',
+  type: 'client',
+  isAdmin: false,
+};
+
 const transactionUser = {
   amount: 555555,
 };
-const accountNumber = 2039956566;
-const userToken = jwt.sign(testUser, SECRET, { expiresIn: '24h' });
+const accountNumber = 2039939293;
+const userToken = jwt.sign(jwtUser, SECRET, { expiresIn: '24h' });
 
 describe('Testing Transaction Controller', () => {
   /**
@@ -75,13 +83,13 @@ describe('Testing Transaction Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response).to.have.status(200);
           expect(response.body.status).to.equal(200);
-          expect(response.body.data).to.be.a('object');
-          expect(response.body.data).to.have.property('transactionId');
-          expect(response.body.data).to.have.property('accountNumber');
-          expect(response.body.data).to.have.property('amount');
-          expect(response.body.data).to.have.property('cashier');
-          expect(response.body.data).to.have.property('transactionType');
-          expect(response.body.data).to.have.property('accountBalance');
+          expect(response.body.data).to.be.a('array');
+          expect(response.body.data[0]).to.have.property('transactionId');
+          expect(response.body.data[0]).to.have.property('accountNumber');
+          expect(response.body.data[0]).to.have.property('amount');
+          expect(response.body.data[0]).to.have.property('cashier');
+          expect(response.body.data[0]).to.have.property('transactionType');
+          expect(response.body.data[0]).to.have.property('accountBalance');
           done();
         });
     });
@@ -118,16 +126,16 @@ describe('Testing Transaction Controller', () => {
         });
     });
 
-    it('should not credit account when the account number does not exist', (done) => {
+    it('should not credit account when the account number is not a number', (done) => {
       chai.request(app)
         .post(`${API_VERSION}/transactions/xxyyzz/credit`)
         .send(transactionUser)
         .set('Authorization', userToken)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
-          expect(response.body.status).to.equal(404);
+          expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Account number does not exist');
+          expect(response.body.error).to.equal('A number is expected');
           done();
         });
     });
@@ -150,7 +158,7 @@ describe('Testing Transaction Controller', () => {
         });
     });
 
-    it('should not credit account when authorization token is invalid', (done) => {
+    it('should not debit account when authorization token is invalid', (done) => {
       chai.request(app)
         .post(transactionUrl)
         .set('Authorization', '555555')
@@ -172,13 +180,13 @@ describe('Testing Transaction Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response).to.have.status(200);
           expect(response.body.status).to.equal(200);
-          expect(response.body.data).to.be.a('object');
-          expect(response.body.data).to.have.property('transactionId');
-          expect(response.body.data).to.have.property('accountNumber');
-          expect(response.body.data).to.have.property('amount');
-          expect(response.body.data).to.have.property('cashier');
-          expect(response.body.data).to.have.property('transactionType');
-          expect(response.body.data).to.have.property('accountBalance');
+          expect(response.body.data).to.be.a('array');
+          expect(response.body.data[0]).to.have.property('transactionId');
+          expect(response.body.data[0]).to.have.property('accountNumber');
+          expect(response.body.data[0]).to.have.property('amount');
+          expect(response.body.data[0]).to.have.property('cashier');
+          expect(response.body.data[0]).to.have.property('transactionType');
+          expect(response.body.data[0]).to.have.property('accountBalance');
           done();
         });
     });
@@ -247,16 +255,16 @@ describe('Testing Transaction Controller', () => {
         });
     });
 
-    it('should not debit account when the account number does not exist', (done) => {
+    it('should not debit account when the account number is not a number', (done) => {
       chai.request(app)
         .post(`${API_VERSION}/transactions/xxyyzz/debit`)
         .send(transactionUser)
         .set('Authorization', userToken)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
-          expect(response.body.status).to.equal(404);
+          expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Account number does not exist');
+          expect(response.body.error).to.equal('A number is expected');
           done();
         });
     });

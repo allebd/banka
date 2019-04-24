@@ -12,7 +12,7 @@ const testUser = {
   id: 89,
   firstName: 'dele',
   lastName: 'bella',
-  email: 'test@test.com',
+  email: 'test@tested.com',
   password: 'password',
   confirmPassword: 'password',
 };
@@ -75,13 +75,13 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response).to.have.status(201);
           expect(response.body.status).to.equal(201);
-          expect(response.body.data).to.be.a('object');
-          expect(response.body.data).to.have.property('accountNumber');
-          expect(response.body.data).to.have.property('firstName');
-          expect(response.body.data).to.have.property('lastName');
-          expect(response.body.data).to.have.property('email');
-          expect(response.body.data).to.have.property('type');
-          expect(response.body.data).to.have.property('openingBalance');
+          expect(response.body.data).to.be.a('array');
+          expect(response.body.data[0]).to.have.property('accountNumber');
+          expect(response.body.data[0]).to.have.property('firstName');
+          expect(response.body.data[0]).to.have.property('lastName');
+          expect(response.body.data[0]).to.have.property('email');
+          expect(response.body.data[0]).to.have.property('type');
+          expect(response.body.data[0]).to.have.property('openingBalance');
           done();
         });
     });
@@ -123,7 +123,7 @@ describe('Testing Accounts Controller', () => {
      * Test the PATCH /accounts/:accountNumber endpoint
      */
   describe('Change of status by activating or deactivating the accounts of account holders', () => {
-    let accountNumber = 2039939293;
+    let accountNumber = 2559939393;
     let accountbody = { status: 'activate' };
 
     it('should activate a user bank account', (done) => {
@@ -134,9 +134,9 @@ describe('Testing Accounts Controller', () => {
         .end((error, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(200);
-          expect(response.body.data).to.have.property('accountNumber');
-          expect(response.body.data.accountNumber).to.equal(accountNumber);
-          expect(response.body.data.status).to.equal(accountbody.status);
+          expect(response.body.data[0]).to.have.property('accountNumber');
+          expect(response.body.data[0].accountNumber).to.equal(accountNumber);
+          expect(response.body.data[0].status).to.equal(accountbody.status);
           done();
         });
     });
@@ -150,9 +150,9 @@ describe('Testing Accounts Controller', () => {
         .end((error, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(200);
-          expect(response.body.data).to.have.property('accountNumber');
-          expect(response.body.data.accountNumber).to.equal(accountNumber);
-          expect(response.body.data.status).to.equal(accountbody.status);
+          expect(response.body.data[0]).to.have.property('accountNumber');
+          expect(response.body.data[0].accountNumber).to.equal(accountNumber);
+          expect(response.body.data[0].status).to.equal(accountbody.status);
           done();
         });
     });
@@ -207,7 +207,7 @@ describe('Testing Accounts Controller', () => {
      * Test the DELETE /accounts/:accountNumber endpoint
      */
   describe('Delete account of account holders', () => {
-    let accountNumber = 2039939293;
+    let accountNumber = 2559939393;
 
     it('should delete a user bank account', (done) => {
       chai.request(app)
@@ -217,7 +217,7 @@ describe('Testing Accounts Controller', () => {
         .end((error, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(200);
-          expect(response.body).to.have.property('message');
+          expect(response.body.data[0]).to.have.property('message');
           done();
         });
     });
