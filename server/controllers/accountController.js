@@ -3,6 +3,7 @@ import moment from 'moment';
 import utils from '../helpers/common';
 import statusCodes from '../helpers/statusCodes';
 import pool from '../models/database';
+import { addAccount, updateAccountStatus, deleteAccount } from '../models/queries';
 
 /**
  * @class AccountController
@@ -33,17 +34,7 @@ class AccountController {
     };
 
     pool.connect((err, client, done) => {
-      const query = `INSERT INTO accounts (
-        accountNumber,
-        createdOn,
-        owner,
-        type,
-        status,
-        balance
-      ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
-      const values = Object.values(data);
-
-      client.query(query, values, (error, result) => {
+      client.query(addAccount(data), (error, result) => {
         done();
         if (error) {
           if (error.code === '23505') {
@@ -94,10 +85,7 @@ class AccountController {
     accountNumber = parseInt(accountNumber, 10);
 
     pool.connect((err, client, done) => {
-      const query = 'UPDATE accounts SET status = $1 WHERE accountnumber = $2 RETURNING id, status';
-      const values = [status, accountNumber];
-
-      client.query(query, values, (error, result) => {
+      client.query(updateAccountStatus(status, accountNumber), (error, result) => {
         done();
         if (error || result.rows.length === 0) {
           return response.status(404).json({
@@ -131,10 +119,7 @@ class AccountController {
     accountNumber = parseInt(accountNumber, 10);
 
     pool.connect((err, client, done) => {
-      const query = 'DELETE FROM accounts WHERE accountnumber = $1 RETURNING id, status';
-      const values = [accountNumber];
-
-      client.query(query, values, (error, result) => {
+      client.query(deleteAccount(accountNumber), (error, result) => {
         done();
         if (error || result.rows.length === 0) {
           return response.status(404).json({

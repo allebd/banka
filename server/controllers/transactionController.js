@@ -1,8 +1,10 @@
+/* eslint-disable max-len */
 /* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 import moment from 'moment';
 import statusCodes from '../helpers/statusCodes';
 import pool from '../models/database';
+import { getAccount, addTransaction, updateAccountBalance } from '../models/queries';
 
 /**
  * @class TransactionController
@@ -25,10 +27,7 @@ class TransactionController {
     amount = parseFloat(amount);
 
     pool.connect((err, client, done) => {
-      const query = 'SELECT * FROM accounts WHERE accountnumber = $1';
-      const values = [accountNumber];
-
-      client.query(query, values, (error, result) => {
+      client.query(getAccount(accountNumber), (error, result) => {
         done();
         if (error || result.rows.length === 0) {
           response.status(404).json({
@@ -50,18 +49,7 @@ class TransactionController {
           newBalance: balance + amount,
         };
 
-        const transactionQuery = `INSERT INTO transactions (
-          createdOn,
-          type,
-          accountNumber,
-          cashier,
-          amount,
-          oldBalance,
-          newBalance
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
-        const transactionValues = Object.values(data);
-
-        client.query(transactionQuery, transactionValues, (transactionError, transactionResult) => {
+        client.query(addTransaction(data), (transactionError, transactionResult) => {
           done();
           if (transactionError) {
             response.status(400).json({
@@ -73,7 +61,7 @@ class TransactionController {
 
           const transactionUser = transactionResult.rows[0];
 
-          client.query('UPDATE accounts set balance=$1 WHERE accountnumber=$2 RETURNING *', [data.newBalance, accountNumber], (updateError, updateResult) => {
+          client.query(updateAccountBalance(data.newBalance, accountNumber), (updateError, updateResult) => {
             done();
             if (updateError) {
               response.status(400).json({
@@ -118,10 +106,7 @@ class TransactionController {
     amount = parseFloat(amount);
 
     pool.connect((err, client, done) => {
-      const query = 'SELECT * FROM accounts WHERE accountnumber = $1';
-      const values = [accountNumber];
-
-      client.query(query, values, (error, result) => {
+      client.query(getAccount(accountNumber), (error, result) => {
         done();
         if (error || result.rows.length === 0) {
           response.status(404).json({
@@ -145,18 +130,7 @@ class TransactionController {
           newBalance: amountLeft,
         };
 
-        const transactionQuery = `INSERT INTO transactions (
-          createdOn,
-          type,
-          accountNumber,
-          cashier,
-          amount,
-          oldBalance,
-          newBalance
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
-        const transactionValues = Object.values(data);
-
-        client.query(transactionQuery, transactionValues, (transactionError, transactionResult) => {
+        client.query(addTransaction(data), (transactionError, transactionResult) => {
           done();
           if (transactionError) {
             response.status(400).json({
@@ -168,7 +142,7 @@ class TransactionController {
 
           const transactionUser = transactionResult.rows[0];
 
-          client.query('UPDATE accounts set balance=$1 where accountnumber=$2 RETURNING *', [data.newBalance, accountNumber], (updateError, updateResult) => {
+          client.query(updateAccountBalance(data.newBalance, accountNumber), (updateError, updateResult) => {
             done();
             if (updateError) {
               response.status(400).json({

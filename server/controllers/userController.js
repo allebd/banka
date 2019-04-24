@@ -3,6 +3,7 @@ import moment from 'moment';
 import utils from '../helpers/common';
 import statusCodes from '../helpers/statusCodes';
 import pool from '../models/database';
+import { getUser, addUser } from '../models/queries';
 
 /**
  * @class UserController
@@ -33,18 +34,7 @@ class UserController {
     };
 
     pool.connect((err, client, done) => {
-      const query = `INSERT INTO users (
-        email,
-        firstName,
-        lastName,
-        password,
-        registered,
-        type,
-        isAdmin
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
-      const values = Object.values(data);
-
-      client.query(query, values, (error, result) => {
+      client.query(addUser(data), (error, result) => {
         done();
         if (error) {
           if (error.code === '23505') {
@@ -98,9 +88,7 @@ class UserController {
     const { email, password } = request.body;
 
     pool.connect((err, client, done) => {
-      const query = 'SELECT * FROM users WHERE email = $1';
-      const values = [email];
-      client.query(query, values, (error, result) => {
+      client.query(getUser(email), (error, result) => {
         done();
         const user = result.rows[0];
         if (!user) {

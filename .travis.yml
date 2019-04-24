@@ -1,7 +1,10 @@
 language: node_js
 service:
   - postgresql
+addons:
+  postgresql: "9.4"
 before_script:
+  - psql -c 'drop database if exists travis_ci_test;' -U postgres
   - psql -c 'create database travis_ci_test;' -U postgres
 node_js:
   - "stable"
