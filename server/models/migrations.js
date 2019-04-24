@@ -14,7 +14,16 @@ const userQuery = `INSERT INTO users (
     isAdmin
 ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
 
-const data = {
+const accountQuery = `INSERT INTO accounts (
+  accountNumber,
+  createdOn,
+  owner,
+  type,
+  status,
+  balance
+) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+
+const adminData = {
   email: 'delebella@gmail.com',
   firstName: 'Dele',
   lastName: 'Bella',
@@ -22,6 +31,34 @@ const data = {
   registered: moment().format(),
   type: 'staff',
   isAdmin: true,
+};
+
+const clientData = {
+  email: 'jamesbond@gmail.com',
+  firstName: 'James',
+  lastName: 'Bond',
+  password: utils.hashPassword('password'),
+  registered: moment().format(),
+  type: 'client',
+  isAdmin: false,
+};
+
+const accountData = {
+  accountNumber: '2039939293',
+  createdOn: moment().format(),
+  owner: 2,
+  type: 'savings',
+  status: 'draft',
+  balance: 0.00,
+};
+
+const accountData2 = {
+  accountNumber: '2559939393',
+  createdOn: moment().format(),
+  owner: 2,
+  type: 'savings',
+  status: 'draft',
+  balance: 0.00,
 };
 
 /**
@@ -43,7 +80,7 @@ const createTables = () => {
   const accounts = `CREATE TABLE IF NOT EXISTS
     accounts (
         id SERIAL PRIMARY KEY,
-        accountNumber INT NOT NULL,
+        accountNumber BIGINT UNIQUE NOT NULL,
         createdOn TIMESTAMP,
         owner INT NOT NULL,
         type VARCHAR(128) NOT NULL,
@@ -56,7 +93,7 @@ const createTables = () => {
         id SERIAL PRIMARY KEY,
         createdOn TIMESTAMP,
         type VARCHAR(128) NOT NULL,
-        accountNumber INT NOT NULL,
+        accountNumber BIGINT NOT NULL,
         cashier INT NOT NULL,
         amount float8,
         oldBalance float8,
@@ -105,8 +142,38 @@ const dropTables = () => {
 };
 
 const createAdmin = () => {
-  const values = Object.values(data);
+  const values = Object.values(adminData);
   pool.query(userQuery, values, (error, result) => {
+    if (error) {
+      debug(error);
+    }
+    debug(result);
+  });
+};
+
+const createClient = () => {
+  const values = Object.values(clientData);
+  pool.query(userQuery, values, (error, result) => {
+    if (error) {
+      debug(error);
+    }
+    debug(result);
+  });
+};
+
+const createAccount = () => {
+  const values = Object.values(accountData);
+  pool.query(accountQuery, values, (error, result) => {
+    if (error) {
+      debug(error);
+    }
+    debug(result);
+  });
+};
+
+const createAccount2 = () => {
+  const values = Object.values(accountData2);
+  pool.query(accountQuery, values, (error, result) => {
     if (error) {
       debug(error);
     }
@@ -119,6 +186,13 @@ pool.on('remove', () => {
   process.exit(0);
 });
 
-module.exports = { dropTables, createTables, createAdmin };
+module.exports = {
+  dropTables,
+  createTables,
+  createAdmin,
+  createClient,
+  createAccount,
+  createAccount2,
+};
 
 require('make-runnable');

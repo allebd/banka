@@ -1,14 +1,15 @@
+/* eslint-disable no-shadow */
 import moment from 'moment';
 import utils from '../helpers/common';
-import dummy from '../models/dummyData';
 import statusCodes from '../helpers/statusCodes';
+import pool from '../models/database';
 
 /**
  * @class UserController
  */
 class UserController {
   /**
-   * creates new user
+   * create new user
    * @param {object} request express request object
    * @param {object} response express response object
    *
@@ -21,41 +22,71 @@ class UserController {
       firstName, lastName, email, password,
     } = request.body;
 
-    if (utils.searchByEmail(email, dummy.users)) {
-      return response.status(400).json({
-        status: statusCodes.badRequest,
-        error: 'Email already exists',
-      });
-    }
-
-    const userData = {
-      id: utils.getNextId(dummy.users),
+    const data = {
       email,
       firstName,
       lastName,
       password: utils.hashPassword(password),
-      type: 'client',
       registered: moment().format(),
+      type: 'client',
       isAdmin: false,
     };
-    dummy.users.push(userData);
 
-    const token = utils.jwtToken(userData);
+    pool.connect((err, client, done) => {
+      const query = `INSERT INTO users (
+        email,
+        firstName,
+        lastName,
+        password,
+        registered,
+        type,
+        isAdmin
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
+      const values = Object.values(data);
 
-    return response.header('Authorization', `${token}`).status(201).json({
-      status: statusCodes.created,
-      data: {
-        token,
-        id: userData.id,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-      },
+      client.query(query, values, (error, result) => {
+        done();
+        if (error) {
+          if (error.code === '23505') {
+            return response.status(400).json({
+              status: statusCodes.badRequest,
+              error: 'Email already exists',
+            });
+          }
+          return response.status(400).json({
+            status: statusCodes.badRequest,
+            error: error.message,
+          });
+        }
+
+        const user = result.rows[0];
+        const tokenData = {
+          id: user.id,
+          email: user.email,
+          type: user.type,
+          isAdmin: user.isAdmin,
+        };
+        const token = utils.jwtToken(tokenData);
+        const {
+          firstname, lastname, email, id,
+        } = user;
+
+        return response.status(201).json({
+          status: statusCodes.created,
+          data: [{
+            token,
+            id,
+            firstName: firstname,
+            lastName: lastname,
+            email,
+          }],
+        });
+      });
     });
   }
 
   /**
-   * logs a user in
+   * log a user in
    * @param {object} request express request object
    * @param {object} response express response object
    *
@@ -66,29 +97,42 @@ class UserController {
   static signin(request, response) {
     const { email, password } = request.body;
 
-    const userData = {
-      email,
-      password,
-    };
+    pool.connect((err, client, done) => {
+      const query = 'SELECT * FROM users WHERE email = $1';
+      const values = [email];
+      client.query(query, values, (error, result) => {
+        done();
+        const user = result.rows[0];
+        if (!user) {
+          return response.status(401).json({ status: statusCodes.unAuthorized, error: 'Invalid login details, email or password is wrong' });
+        }
+        if (utils.validatePassword(password, user.password)) {
+          const tokenData = {
+            id: user.id,
+            email: user.email,
+            type: user.type,
+            isAdmin: user.isAdmin,
+          };
+          const token = utils.jwtToken(tokenData);
 
-    const storedUser = utils.searchByEmail(email, dummy.users);
-    if (storedUser) {
-      if (utils.validatePassword(userData.password, storedUser.password)) {
-        const token = utils.jwtToken(storedUser);
-        return response.header('Authorization', `${token}`).status(200).json({
-          status: statusCodes.success,
-          data: {
-            token,
-            id: storedUser.id,
-            firstName: storedUser.firstName,
-            lastName: storedUser.lastName,
-            email: storedUser.email,
-          },
-        });
-      }
-    }
+          const {
+            firstname, lastname, email, id,
+          } = user;
 
-    return response.status(401).json({ status: statusCodes.unAuthorized, error: 'Invalid login details, email or password is wrong' });
+          return response.status(200).json({
+            status: statusCodes.success,
+            data: [{
+              token,
+              id,
+              firstName: firstname,
+              lastName: lastname,
+              email,
+            }],
+          });
+        }
+        return response.status(401).json({ status: statusCodes.unAuthorized, error: 'Invalid login details, email or password is wrong' });
+      });
+    });
   }
 }
 

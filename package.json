@@ -6,13 +6,16 @@
   "scripts": {
     "start": "npm run build && node dist/server.js",
     "build": "babel server -d dist",
-    "test": "set NODE_ENV=TEST npm run migrate && nyc mocha ./server/__tests__/*.js --require @babel/register --exit",
-    "start:dev": "set DEBUG=http & nodemon --exec babel-node ./server/server.js",
+    "test": "set NODE_ENV=TEST && npm run migrate && nyc mocha ./server/__tests__/*.js --require @babel/register --exit",
+    "start:dev": "set DEBUG=http && nodemon --exec babel-node ./server/server.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "dropTable": "babel-node ./server/models/migrations dropTables",
     "createTable": "babel-node ./server/models/migrations createTables",
     "createAdmin": "babel-node ./server/models/migrations createAdmin",
-    "migrate": "npm run dropTable && npm run createTable && npm run createAdmin"
+    "createClient": "babel-node ./server/models/migrations createClient",
+    "createAccount": "babel-node ./server/models/migrations createAccount",
+    "createAccount2": "babel-node ./server/models/migrations createAccount2",
+    "migrate": "npm run dropTable && npm run createTable && npm run createAdmin && npm run createClient && npm run createAccount && npm run createAccount2"
   },
   "repository": {
     "type": "git",
