@@ -267,4 +267,51 @@ describe('Testing User Controller', () => {
         });
     });
   });
+
+  describe('Testing user accounts controller', () => {
+    /**
+       * Test the GET /user/:userEmail/accounts endpoint
+       */
+    let userEmail = 'jamesbond@gmail.com';
+    const accountUrl = `${API_VERSION}/user/${userEmail}/accounts`;
+    it('should view a user\'s accounts when all the parameters are given', (done) => {
+      chai.request(app)
+        .get(accountUrl)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(200);
+          expect(response.body.data).to.be.a('array');
+          done();
+        });
+    });
+
+    it('should not view a user\'s accounts when the email does not exist', (done) => {
+      userEmail = 'brucelee@gmail.com';
+      chai.request(app)
+        .get(`${API_VERSION}/user/${userEmail}/accounts`)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(404);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('User does not exist');
+          done();
+        });
+    });
+
+    it('should not view a user\'s accounts when the email owner does not have an account', (done) => {
+      userEmail = 'test@tester.com';
+      chai.request(app)
+        .get(`${API_VERSION}/user/${userEmail}/accounts`)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(404);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('User has no account created');
+          done();
+        });
+    });
+  });
 });

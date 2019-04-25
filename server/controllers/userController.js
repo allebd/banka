@@ -1,9 +1,10 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-shadow */
 import moment from 'moment';
 import utils from '../helpers/common';
 import statusCodes from '../helpers/statusCodes';
 import pool from '../models/database';
-import { getUser, addUser } from '../models/queries';
+import { getUser, addUser, getAccountByOwnerId } from '../models/queries';
 
 /**
  * @class UserController
@@ -119,6 +120,41 @@ class UserController {
           });
         }
         return response.status(401).json({ status: statusCodes.unAuthorized, error: 'Invalid login details, email or password is wrong' });
+      });
+    });
+  }
+
+  /**
+   * check user accounts
+   * @param {object} request express request object
+   * @param {object} response express response object
+   *
+   * @returns {json} json
+   * @memberof UserController
+   */
+
+  static checkAccounts(request, response) {
+    const { userEmail } = request.params;
+
+    pool.connect((err, client, done) => {
+      client.query(getUser(userEmail), (error, result) => {
+        done();
+        const user = result.rows[0];
+        if (!user) {
+          return response.status(404).json({ status: statusCodes.notFound, error: 'User does not exist' });
+        }
+
+        client.query(getAccountByOwnerId(user.id), (accountError, accountResult) => {
+          done();
+          if (accountResult.rows.length === 0) {
+            return response.status(404).json({ status: statusCodes.notFound, error: 'User has no account created' });
+          }
+
+          return response.status(200).json({
+            status: statusCodes.success,
+            data: accountResult.rows,
+          });
+        });
       });
     });
   }

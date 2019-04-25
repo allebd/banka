@@ -43,15 +43,27 @@ export const deleteAccount = accountNumber => ({
 });
 
 /**
- * @name getAccount
+ * @name getAccountByNumber
  * @description - gets a single account
  * @param {int} accountNumber
  * @returns the query
  */
 
-export const getAccount = accountNumber => ({
+export const getAccountByNumber = accountNumber => ({
   text: 'SELECT * FROM accounts WHERE accountnumber = $1',
   values: [accountNumber],
+});
+
+/**
+ * @name getAccountByOwnerId
+ * @description - gets all owner account
+ * @param {int} ownerId
+ * @returns the query
+ */
+
+export const getAccountByOwnerId = ownerId => ({
+  text: 'SELECT createdon, accountnumber, type, status, balance FROM accounts WHERE owner = $1',
+  values: [ownerId],
 });
 
 /**
