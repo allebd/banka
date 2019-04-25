@@ -237,4 +237,39 @@ describe('Testing Accounts Controller', () => {
         });
     });
   });
+
+  /**
+     * Test the GET /accounts/:accountNumber/transactions endpoint
+     */
+  describe('View an account’s transaction history', () => {
+    let accountNumber = 2039939293;
+
+    it('should view an account\'s transaction history', (done) => {
+      chai.request(app)
+        .get(`${API_VERSION}/accounts/${accountNumber}/transactions`)
+        .set('Authorization', userToken)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(200);
+          expect(response.body.data).to.be.an('array');
+          done();
+        });
+    });
+
+    it('should not view an account transaction history if the account number is wrong or does not exist', (done) => {
+      accountNumber = 2220108723333;
+      chai.request(app)
+        .get(`${API_VERSION}/accounts/${accountNumber}/transactions`)
+        .set('Authorization', userToken)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(404);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('Account number does not exist');
+          done();
+        });
+    });
+  });
 });
