@@ -66,6 +66,18 @@ export const getAccounts = () => ({
 });
 
 /**
+ * @name getAccountByStatus
+ * @description - gets all dormant account
+ * @param {string} status
+ * @returns the query
+ */
+
+export const getAccountByStatus = status => ({
+  text: 'SELECT a.createdon AS createdOn, a.accountnumber AS accountNumber, u.email AS ownerEmail, a.type AS type, a.status AS status , a.balance AS balance FROM accounts a INNER JOIN users u ON u.id = a.owner WHERE status = $i',
+  values: [status],
+});
+
+/**
  * @name getAccountByOwnerId
  * @description - gets all owner account
  * @param {int} ownerId

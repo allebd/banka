@@ -325,9 +325,40 @@ describe('Testing Accounts Controller', () => {
         });
     });
 
-    it('should not view all accounts if not authoriized', (done) => {
+    it('should not view all accounts if not authorized', (done) => {
       chai.request(app)
         .get(`${API_VERSION}/accounts`)
+        .set('Authorization', '88999')
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(401);
+          expect(response.body.error).to.be.a('string');
+          done();
+        });
+    });
+  });
+
+  /**
+     * Test the GET /accounts?status=dormant endpoint
+     */
+  describe('View all dormant accounts', () => {
+    it('should not view all dormant accounts if not authorized', (done) => {
+      chai.request(app)
+        .get(`${API_VERSION}/accounts?status=dormant`)
+        .set('Authorization', '88999')
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(401);
+          expect(response.body.error).to.be.a('string');
+          done();
+        });
+    });
+
+    it('should not view all active accounts if not authorized', (done) => {
+      chai.request(app)
+        .get(`${API_VERSION}/accounts?status=active`)
         .set('Authorization', '88999')
         .send()
         .end((error, response) => {
