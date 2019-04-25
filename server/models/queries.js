@@ -132,3 +132,15 @@ export const getUser = email => ({
   text: 'SELECT * FROM users WHERE email = $1',
   values: [email],
 });
+
+/**
+ * @name getAccountTransactions
+ * @description - gets a single account Transactions
+ * @param {int} accountNumber
+ * @returns the query
+ */
+
+export const getAccountTransactions = accountNumber => ({
+  text: 'SELECT id AS transactionId, createdon AS createdOn, type, accountnumber AS accountNumber, oldbalance AS oldBalance, newbalance AS newBalance FROM transactions WHERE accountnumber = $1',
+  values: [accountNumber],
+});

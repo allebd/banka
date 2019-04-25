@@ -15,11 +15,6 @@ const testUser = {
   email: 'testing@transaction.com',
   password: 'delapassword',
   confirmPassword: 'delapassword',
-};
-
-const jwtUser = {
-  id: 90,
-  email: 'testing@transaction.com',
   type: 'client',
   isAdmin: false,
 };
@@ -28,7 +23,7 @@ const transactionUser = {
   amount: 555555,
 };
 const accountNumber = 2039939293;
-const userToken = jwt.sign(jwtUser, SECRET, { expiresIn: '24h' });
+const userToken = jwt.sign(testUser, SECRET, { expiresIn: '24h' });
 
 describe('Testing Transaction Controller', () => {
   /**

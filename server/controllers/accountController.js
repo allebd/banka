@@ -1,9 +1,17 @@
+/* eslint-disable consistent-return */
+/* eslint-disable max-len */
 /* eslint-disable no-shadow */
 import moment from 'moment';
 import utils from '../helpers/common';
 import statusCodes from '../helpers/statusCodes';
 import pool from '../models/database';
-import { addAccount, updateAccountStatus, deleteAccount } from '../models/queries';
+import {
+  addAccount,
+  updateAccountStatus,
+  deleteAccount,
+  getAccount,
+  getAccountTransactions,
+} from '../models/queries';
 
 /**
  * @class AccountController
@@ -131,6 +139,47 @@ class AccountController {
         return response.status(200).json({
           status: statusCodes.success,
           data: [{ message: 'Account successfully deleted' }],
+        });
+      });
+    });
+  }
+
+  /**
+   * Account Transactions
+   * @param {object} request express request object
+   * @param {object} response express response object
+   *
+   * @returns {json} json
+   * @memberof AccountController
+   */
+  // eslint-disable-next-line consistent-return
+  static accountTransactions(request, response) {
+    let { accountNumber } = request.params;
+    accountNumber = parseInt(accountNumber, 10);
+
+    pool.connect((err, client, done) => {
+      client.query(getAccount(accountNumber), (error, result) => {
+        done();
+        if (error || result.rows.length === 0) {
+          return response.status(404).json({
+            status: statusCodes.notFound,
+            error: 'Account number does not exist',
+          });
+        }
+
+        client.query(getAccountTransactions(accountNumber), (transactError, transactResult) => {
+          done();
+          if (transactError) {
+            return response.status(404).json({
+              status: statusCodes.notFound,
+              error: 'No record found',
+            });
+          }
+
+          return response.status(200).json({
+            status: statusCodes.success,
+            data: transactResult.rows,
+          });
         });
       });
     });
