@@ -11,6 +11,7 @@ import {
   deleteAccount,
   getAccountByNumber,
   getAccountTransactions,
+  getUserById,
 } from '../models/queries';
 
 /**
@@ -180,6 +181,45 @@ class AccountController {
             status: statusCodes.success,
             data: transactResult.rows,
           });
+        });
+      });
+    });
+  }
+
+  /**
+   * Check account details
+   * @param {object} request express request object
+   * @param {object} response express response object
+   *
+   * @returns {json} json
+   * @memberof AccountController
+   */
+  // eslint-disable-next-line consistent-return
+  static checkAccount(request, response) {
+    let { accountNumber } = request.params;
+    accountNumber = parseInt(accountNumber, 10);
+
+    pool.connect((err, client, done) => {
+      client.query(getAccountByNumber(accountNumber), (error, result) => {
+        done();
+        if (error || result.rows.length === 0) {
+          return response.status(404).json({
+            status: statusCodes.notFound,
+            error: 'Account number does not exist',
+          });
+        }
+
+        const accountDetails = result.rows[0];
+        const {
+          createdon, accountnumber, owner, type, status, balance,
+        } = accountDetails;
+        const user = getUserById(owner);
+
+        return response.status(200).json({
+          status: statusCodes.success,
+          data: [{
+            createdOn: createdon, accountNumber: accountnumber, ownerEmail: user.email, type, status, balance,
+          }],
         });
       });
     });

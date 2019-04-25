@@ -4,7 +4,7 @@ import moment from 'moment';
 import utils from '../helpers/common';
 import statusCodes from '../helpers/statusCodes';
 import pool from '../models/database';
-import { getUser, addUser, getAccountByOwnerId } from '../models/queries';
+import { getUserByEmail, addUser, getAccountByOwnerId } from '../models/queries';
 
 /**
  * @class UserController
@@ -89,7 +89,7 @@ class UserController {
     const { email, password } = request.body;
 
     pool.connect((err, client, done) => {
-      client.query(getUser(email), (error, result) => {
+      client.query(getUserByEmail(email), (error, result) => {
         done();
         const user = result.rows[0];
         if (!user) {
@@ -137,7 +137,7 @@ class UserController {
     const { userEmail } = request.params;
 
     pool.connect((err, client, done) => {
-      client.query(getUser(userEmail), (error, result) => {
+      client.query(getUserByEmail(userEmail), (error, result) => {
         done();
         const user = result.rows[0];
         if (!user) {
