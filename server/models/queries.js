@@ -134,15 +134,27 @@ export const addUser = data => ({
 });
 
 /**
- * @name getUser
+ * @name getUserByEmail
  * @description - gets a single user
  * @param {string} email
  * @returns the query
  */
 
-export const getUser = email => ({
+export const getUserByEmail = email => ({
   text: 'SELECT * FROM users WHERE email = $1',
   values: [email],
+});
+
+/**
+ * @name getUserById
+ * @description - gets a single user
+ * @param {int} id
+ * @returns the query
+ */
+
+export const getUserById = userId => ({
+  text: 'SELECT * FROM users WHERE id = $1',
+  values: [userId],
 });
 
 /**
