@@ -18,6 +18,14 @@ class TransactionValidate {
 
     next();
   }
+
+  static validateTransaction(request, response, next) {
+    const { transactionId } = request.params;
+
+    if (isNaN(transactionId)) { return response.status(400).json({ status: statusCodes.badRequest, error: 'A number is expected' }); }
+
+    next();
+  }
 }
 
 export default TransactionValidate;

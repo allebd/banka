@@ -144,3 +144,15 @@ export const getAccountTransactions = accountNumber => ({
   text: 'SELECT id AS transactionId, createdon AS createdOn, type, accountnumber AS accountNumber, oldbalance AS oldBalance, newbalance AS newBalance FROM transactions WHERE accountnumber = $1',
   values: [accountNumber],
 });
+
+/**
+ * @name getTransaction
+ * @description - gets a single Transaction
+ * @param {int} transactionId
+ * @returns the query
+ */
+
+export const getTransaction = transactionId => ({
+  text: 'SELECT * FROM transactions WHERE id = $1',
+  values: [transactionId],
+});

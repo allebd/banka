@@ -7,6 +7,7 @@ const API_VERSION = '/api/v1';
 const transactionRoute = (app) => {
   app.post(`${API_VERSION}/transactions/:accountNumber/credit`, authenticate, transactionValidation.validateAmount, transactionController.creditAccount);
   app.post(`${API_VERSION}/transactions/:accountNumber/debit`, authenticate, transactionValidation.validateAmount, transactionController.debitAccount);
+  app.get(`${API_VERSION}/transactions/:transactionId`, authenticate, transactionValidation.validateTransaction, transactionController.checkTransaction);
 };
 
 export default transactionRoute;

@@ -62,6 +62,3 @@ typings/
 
 # dist folder
 dist/
-
-# dummyData
-server/models/dummyData.js
