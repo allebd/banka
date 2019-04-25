@@ -13,6 +13,7 @@ import {
   getAccountTransactions,
   getUserById,
   getAccounts,
+  getAccountByStatus,
 } from '../models/queries';
 
 /**
@@ -227,7 +228,7 @@ class AccountController {
   }
 
   /**
-   * Check account details
+   * Check accounts
    * @param {object} request express request object
    * @param {object} response express response object
    *
@@ -236,6 +237,29 @@ class AccountController {
    */
   // eslint-disable-next-line consistent-return
   static checkAccounts(request, response) {
+    const { status } = request.query;
+
+    if (status) {
+      pool.connect((err, client, done) => {
+        client.query(getAccountByStatus(), (error, result) => {
+          done();
+          if (error || result.rows.length === 0) {
+            return response.status(404).json({
+              status: statusCodes.notFound,
+              error: 'No record exist',
+            });
+          }
+
+          const accountDetails = result.rows;
+
+          return response.status(200).json({
+            status: statusCodes.success,
+            data: accountDetails,
+          });
+        });
+      });
+    }
+
     pool.connect((err, client, done) => {
       client.query(getAccounts(), (error, result) => {
         done();
