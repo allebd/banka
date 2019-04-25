@@ -4,7 +4,9 @@
 import moment from 'moment';
 import statusCodes from '../helpers/statusCodes';
 import pool from '../models/database';
-import { getAccount, addTransaction, updateAccountBalance } from '../models/queries';
+import {
+  getAccount, addTransaction, updateAccountBalance, getTransaction,
+} from '../models/queries';
 
 /**
  * @class TransactionController
@@ -166,6 +168,42 @@ class TransactionController {
             });
             response.end();
           });
+        });
+      });
+    });
+  }
+
+  /**
+   * View specific transaction
+   * @param {object} request express request object
+   * @param {object} response express response object
+   *
+   * @returns {json} json
+   * @memberof TransactionController
+   */
+  static checkTransaction(request, response) {
+    let { transactionId } = request.params;
+    transactionId = parseInt(transactionId, 10);
+
+    pool.connect((err, client, done) => {
+      client.query(getTransaction(transactionId), (transactError, transactResult) => {
+        done();
+        if (transactResult.rows.length === 0) {
+          return response.status(404).json({
+            status: statusCodes.notFound,
+            error: 'No record found',
+          });
+        }
+
+        const transactionDetail = transactResult.rows[0];
+        const {
+          id, createdon, type, accountnumber, oldbalance, newbalance,
+        } = transactionDetail;
+        return response.status(200).json({
+          status: statusCodes.success,
+          data: [{
+            transactionId: id, createdOn: createdon, type, accountNumber: accountnumber, oldBalance: oldbalance, newBalance: newbalance,
+          }],
         });
       });
     });

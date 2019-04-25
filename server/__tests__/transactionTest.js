@@ -264,4 +264,40 @@ describe('Testing Transaction Controller', () => {
         });
     });
   });
+
+  /**
+     * Test the GET /transactions/:transactionId endpoint
+     */
+  describe('Testing to get a specific transaction', () => {
+    let transactionId = 1;
+    const transactionUrl = `${API_VERSION}/transactions/${transactionId}`;
+
+    it('should view a specific transaction detail', (done) => {
+      chai.request(app)
+        .get(transactionUrl)
+        .set('Authorization', userToken)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(200);
+          expect(response.body.data).to.be.an('array');
+          done();
+        });
+    });
+
+    it('should not view a specific transaction detail if the transaction id is wrong or does not exist', (done) => {
+      transactionId = 209303;
+      chai.request(app)
+        .get(`${API_VERSION}/transactions/${transactionId}`)
+        .set('Authorization', userToken)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(404);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('No record found');
+          done();
+        });
+    });
+  });
 });
