@@ -12,6 +12,7 @@ import {
   getAccountByNumber,
   getAccountTransactions,
   getUserById,
+  getAccounts,
 } from '../models/queries';
 
 /**
@@ -187,7 +188,7 @@ class AccountController {
   }
 
   /**
-   * Check account details
+   * Check account number details
    * @param {object} request express request object
    * @param {object} response express response object
    *
@@ -195,7 +196,7 @@ class AccountController {
    * @memberof AccountController
    */
   // eslint-disable-next-line consistent-return
-  static checkAccount(request, response) {
+  static checkAccountNumber(request, response) {
     let { accountNumber } = request.params;
     accountNumber = parseInt(accountNumber, 10);
 
@@ -220,6 +221,36 @@ class AccountController {
           data: [{
             createdOn: createdon, accountNumber: accountnumber, ownerEmail: user.email, type, status, balance,
           }],
+        });
+      });
+    });
+  }
+
+  /**
+   * Check account details
+   * @param {object} request express request object
+   * @param {object} response express response object
+   *
+   * @returns {json} json
+   * @memberof AccountController
+   */
+  // eslint-disable-next-line consistent-return
+  static checkAccounts(request, response) {
+    pool.connect((err, client, done) => {
+      client.query(getAccounts(), (error, result) => {
+        done();
+        if (error || result.rows.length === 0) {
+          return response.status(404).json({
+            status: statusCodes.notFound,
+            error: 'No record exist',
+          });
+        }
+
+        const accountDetails = result.rows;
+
+        return response.status(200).json({
+          status: statusCodes.success,
+          data: accountDetails,
         });
       });
     });
