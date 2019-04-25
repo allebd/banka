@@ -307,4 +307,35 @@ describe('Testing Accounts Controller', () => {
         });
     });
   });
+
+  /**
+     * Test the GET /accounts endpoint
+     */
+  describe('View all accounts', () => {
+    it('should view all accounts', (done) => {
+      chai.request(app)
+        .get(`${API_VERSION}/accounts`)
+        .set('Authorization', userToken)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(200);
+          expect(response.body.data).to.be.an('array');
+          done();
+        });
+    });
+
+    it('should not view all accounts if not authoriized', (done) => {
+      chai.request(app)
+        .get(`${API_VERSION}/accounts`)
+        .set('Authorization', '88999')
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(401);
+          expect(response.body.error).to.be.a('string');
+          done();
+        });
+    });
+  });
 });

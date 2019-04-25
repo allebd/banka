@@ -9,7 +9,8 @@ const accountRoute = (app) => {
   app.patch(`${API_VERSION}/account/:accountNumber`, authenticate, accountValidation.validateStatusChange, accountController.changeAccountStatus);
   app.delete(`${API_VERSION}/accounts/:accountNumber`, authenticate, accountController.deleteAccount);
   app.get(`${API_VERSION}/accounts/:accountNumber/transactions`, authenticate, accountController.accountTransactions);
-  app.get(`${API_VERSION}/accounts/:accountNumber`, authenticate, accountController.checkAccount);
+  app.get(`${API_VERSION}/accounts/:accountNumber`, authenticate, accountController.checkAccountNumber);
+  app.get(`${API_VERSION}/accounts`, authenticate, accountController.checkAccounts);
 };
 
 export default accountRoute;
