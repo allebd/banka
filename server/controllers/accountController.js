@@ -9,7 +9,7 @@ import {
   addAccount,
   updateAccountStatus,
   deleteAccount,
-  getAccount,
+  getAccountByNumber,
   getAccountTransactions,
 } from '../models/queries';
 
@@ -158,7 +158,7 @@ class AccountController {
     accountNumber = parseInt(accountNumber, 10);
 
     pool.connect((err, client, done) => {
-      client.query(getAccount(accountNumber), (error, result) => {
+      client.query(getAccountByNumber(accountNumber), (error, result) => {
         done();
         if (error || result.rows.length === 0) {
           return response.status(404).json({

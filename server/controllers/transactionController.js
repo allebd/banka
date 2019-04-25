@@ -5,7 +5,7 @@ import moment from 'moment';
 import statusCodes from '../helpers/statusCodes';
 import pool from '../models/database';
 import {
-  getAccount, addTransaction, updateAccountBalance, getTransaction,
+  getAccountByNumber, addTransaction, updateAccountBalance, getTransaction,
 } from '../models/queries';
 
 /**
@@ -29,7 +29,7 @@ class TransactionController {
     amount = parseFloat(amount);
 
     pool.connect((err, client, done) => {
-      client.query(getAccount(accountNumber), (error, result) => {
+      client.query(getAccountByNumber(accountNumber), (error, result) => {
         done();
         if (error || result.rows.length === 0) {
           response.status(404).json({
@@ -108,7 +108,7 @@ class TransactionController {
     amount = parseFloat(amount);
 
     pool.connect((err, client, done) => {
-      client.query(getAccount(accountNumber), (error, result) => {
+      client.query(getAccountByNumber(accountNumber), (error, result) => {
         done();
         if (error || result.rows.length === 0) {
           response.status(404).json({
