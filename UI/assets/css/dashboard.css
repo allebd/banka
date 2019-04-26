@@ -304,8 +304,9 @@ footer a{
 
 .modal-content{    
     padding: 15px;
+    font-size: 16px;
     margin: auto;
-    max-height: 20%;
+    max-height: 40%;
     background-color: var(--background);
 }
 
@@ -315,6 +316,10 @@ footer a{
 
 .modal-header h3{
     margin: 0;
+}
+
+.modal-footer {
+    text-align: center;
 }
 
 #delete-account, #activate-account, #deactivate-account{
