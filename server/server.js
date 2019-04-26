@@ -2,6 +2,8 @@ import Debug from 'debug';
 import dotenv from 'dotenv';
 import express from 'express';
 import logger from 'morgan';
+import swaggerUI from 'swagger-ui-express';
+import swaggerDocument from './swagger';
 import route from './routes';
 
 // calling an instance of express
@@ -13,6 +15,9 @@ app.use(logger('dev'));
 // middlewares - parse incoming requests data
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// documentation
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.get('/', (request, response) => {
   response.status(200).send('The API is working');
