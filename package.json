@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/server.js",
     "postinstall": "npm run build",
-    "build": "babel server -d dist",
+    "build": "babel server -d dist && npm run build-babel",
+    "build-babel": "babel ./server/docs --out-dir dist/docs --copy-files",
     "test": "set NODE_ENV=TEST && npm run migrate && nyc mocha ./server/__tests__/*.js --require @babel/register --exit",
     "start:dev": "set DEBUG=http && nodemon --exec babel-node ./server/server.js",
     "coverage": "npm test && nyc report --reporter=text-lcov | coveralls",
@@ -62,6 +63,7 @@
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "pg": "^7.10.0",
+    "swagger-jsdoc": "^3.2.9",
     "swagger-ui-express": "^4.0.2"
   }
 }

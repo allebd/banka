@@ -52,7 +52,7 @@ Application was deployed to Heroku. Use public URL [https://banka-allebd.herokua
 
 ## Swagger Documentation
 
-API Documention was generated with [Swagger](https://banka-allebd.herokuapp.com/docs).
+API Documention was generated with [Swagger](https://banka-allebd.herokuapp.com/api-docs).
 
 ## Technologies Used
 
