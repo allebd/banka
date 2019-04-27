@@ -8,14 +8,14 @@ const { SECRET } = process.env;
 chai.use(chaiHttp);
 
 const API_VERSION = '/api/v1';
-const testUser = {
-  id: 90,
-  firstName: 'steve',
-  lastName: 'cannon',
-  email: 'testing@transaction.com',
-  password: 'delapassword',
-  confirmPassword: 'delapassword',
-  type: 'client',
+const testStaff = {
+  id: 101,
+  firstName: 'staff',
+  lastName: 'staff',
+  email: 'staff@gmail.com',
+  password: 'password',
+  confirmPassword: 'password',
+  type: 'staff',
   isAdmin: false,
 };
 
@@ -23,7 +23,7 @@ const transactionUser = {
   amount: 555555,
 };
 const accountNumber = 2039939293;
-const userToken = jwt.sign(testUser, SECRET, { expiresIn: '24h' });
+const staffToken = jwt.sign(testStaff, SECRET, { expiresIn: '24h' });
 
 describe('Testing Transaction Controller', () => {
   /**
@@ -32,7 +32,7 @@ describe('Testing Transaction Controller', () => {
   before('transaction operations can begin when user have signed up', (done) => {
     chai.request(app)
       .post(`${API_VERSION}/auth/signup`)
-      .send(testUser)
+      .send(testStaff)
       .end((error, response) => {
         expect(response.body.status).to.equal(201);
         done();
@@ -72,7 +72,7 @@ describe('Testing Transaction Controller', () => {
     it('should credit account when all the parameters are given', (done) => {
       chai.request(app)
         .post(transactionUrl)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .send(transactionUser)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -92,7 +92,7 @@ describe('Testing Transaction Controller', () => {
     it('should not credit account when the amount is zero', (done) => {
       chai.request(app)
         .post(transactionUrl)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .send({
           amount: 0,
         })
@@ -108,7 +108,7 @@ describe('Testing Transaction Controller', () => {
     it('should not credit account when the amount is less than zero', (done) => {
       chai.request(app)
         .post(transactionUrl)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .send({
           amount: -20,
         })
@@ -125,7 +125,7 @@ describe('Testing Transaction Controller', () => {
       chai.request(app)
         .post(`${API_VERSION}/transactions/xxyyzz/credit`)
         .send(transactionUser)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
@@ -169,7 +169,7 @@ describe('Testing Transaction Controller', () => {
     it('should debit account when all the parameters are given', (done) => {
       chai.request(app)
         .post(transactionUrl)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .send(transactionUser)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -189,7 +189,7 @@ describe('Testing Transaction Controller', () => {
     it('should not debit account when the amount is zero', (done) => {
       chai.request(app)
         .post(transactionUrl)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .send({
           amount: 0,
         })
@@ -205,7 +205,7 @@ describe('Testing Transaction Controller', () => {
     it('should not debit account when the amount is null', (done) => {
       chai.request(app)
         .post(transactionUrl)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .send({
           amount: null,
         })
@@ -221,7 +221,7 @@ describe('Testing Transaction Controller', () => {
     it('should not debit account when the amount is less than zero', (done) => {
       chai.request(app)
         .post(transactionUrl)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .send({
           amount: -20,
         })
@@ -237,7 +237,7 @@ describe('Testing Transaction Controller', () => {
     it('should not debit account when the amount is greater than the balance', (done) => {
       chai.request(app)
         .post(transactionUrl)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .send({
           amount: 30000000,
         })
@@ -254,7 +254,7 @@ describe('Testing Transaction Controller', () => {
       chai.request(app)
         .post(`${API_VERSION}/transactions/xxyyzz/debit`)
         .send(transactionUser)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
@@ -275,7 +275,7 @@ describe('Testing Transaction Controller', () => {
     it('should view a specific transaction detail', (done) => {
       chai.request(app)
         .get(transactionUrl)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -289,7 +289,7 @@ describe('Testing Transaction Controller', () => {
       transactionId = 209303;
       chai.request(app)
         .get(`${API_VERSION}/transactions/${transactionId}`)
-        .set('Authorization', userToken)
+        .set('Authorization', staffToken)
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');

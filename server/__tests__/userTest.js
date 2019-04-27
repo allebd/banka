@@ -1,6 +1,9 @@
 import chaiHttp from 'chai-http';
 import chai, { expect } from 'chai';
+import jwt from 'jsonwebtoken';
 import app from '../server';
+
+const { SECRET } = process.env;
 
 chai.use(chaiHttp);
 const API_VERSION = '/api/v1';
@@ -12,6 +15,17 @@ const testUser = {
   password: 'password',
   confirmPassword: 'password',
 };
+
+const jwtUser = {
+  id: 67,
+  firstName: 'dele',
+  lastName: 'bella',
+  email: 'test@tester.com',
+  type: 'client',
+  isAdmin: false,
+};
+
+const userToken = jwt.sign(jwtUser, SECRET, { expiresIn: '24h' });
 
 describe('Testing User Controller', () => {
   describe('Testing signup controller', () => {
@@ -277,6 +291,7 @@ describe('Testing User Controller', () => {
     it('should view a user\'s accounts when all the parameters are given', (done) => {
       chai.request(app)
         .get(accountUrl)
+        .set('Authorization', userToken)
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -290,6 +305,7 @@ describe('Testing User Controller', () => {
       userEmail = 'brucelee@gmail.com';
       chai.request(app)
         .get(`${API_VERSION}/user/${userEmail}/accounts`)
+        .set('Authorization', userToken)
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -304,6 +320,7 @@ describe('Testing User Controller', () => {
       userEmail = 'test@tester.com';
       chai.request(app)
         .get(`${API_VERSION}/user/${userEmail}/accounts`)
+        .set('Authorization', userToken)
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');

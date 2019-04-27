@@ -10,7 +10,7 @@
 import statusCodes from '../../helpers/statusCodes';
 
 const verifyAdminStaff = (request, response, next) => {
-  const { isAdmin, type } = request.decoded;
+  const { isAdmin, type } = request.decode;
   if ((isAdmin && type === 'staff') || (!isAdmin && type === 'staff')) {
     next();
   } else {

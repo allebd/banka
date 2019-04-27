@@ -21,8 +21,19 @@ class UserController {
 
   static signup(request, response) {
     const {
-      firstName, lastName, email, password,
+      firstName, lastName, email, password, type,
     } = request.body;
+
+    let userType = 'client';
+    let adminType = false;
+
+    if (type) {
+      userType = type;
+      if (userType === 'admin') {
+        adminType = true;
+        userType = 'staff';
+      }
+    }
 
     const data = {
       email,
@@ -30,8 +41,8 @@ class UserController {
       lastName,
       password: utils.hashPassword(password),
       registered: moment().format(),
-      type: 'client',
-      isAdmin: false,
+      type: userType,
+      isAdmin: adminType,
     };
 
     pool.connect((err, client, done) => {
@@ -53,9 +64,11 @@ class UserController {
         const user = result.rows[0];
         const tokenData = {
           id: user.id,
+          firstName: user.firstname,
+          lastName: user.lastname,
           email: user.email,
           type: user.type,
-          isAdmin: user.isAdmin,
+          isAdmin: user.isadmin,
         };
         const token = utils.jwtToken(tokenData);
         const {
@@ -100,7 +113,7 @@ class UserController {
             id: user.id,
             email: user.email,
             type: user.type,
-            isAdmin: user.isAdmin,
+            isAdmin: user.isadmin,
           };
           const token = utils.jwtToken(tokenData);
 
