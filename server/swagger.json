@@ -12,23 +12,23 @@
   ],
   "tags": [
     {
-      "name": "User",
-      "description": "All user entries"
+      "name": "Client",
+      "description": "All actions by client"
     },
     {
-      "name": "Account",
-      "description": "All account entries and returns"
+      "name": "Staff",
+      "description": "All actions by staff"
     },
     {
-      "name": "Transaction",
-      "description": "All transaction entries and returns"
+      "name": "Admin",
+      "description": "All actions by admin"
     }
   ],
   "paths": {
     "/auth/signup": {
       "post": {
         "tags": [
-          "User"
+          "Client"
         ],
         "summary": "Register a new user",
         "requestBody": {
@@ -91,9 +91,11 @@
     "/auth/signin": {
       "post": {
         "tags": [
-          "User"
+          "Client",
+          "Staff",
+          "Admin"
         ],
-        "summary": "Existing user use this to gain access into the system",
+        "summary": "Logs in a registered user",
         "requestBody": {
           "required": true,
           "content": {
@@ -139,7 +141,7 @@
     "/accounts": {
       "post": {
         "tags": [
-          "Account"
+          "Client"
         ],
         "summary": "Creates a new bank account",
         "security": [
@@ -183,7 +185,8 @@
       },
       "get": {
         "tags": [
-          "Account"
+          "Staff",
+          "Admin"
         ],
         "summary": "Gets all bank accounts",
         "security": [
@@ -224,7 +227,8 @@
     "/account/{accountNumber}": {
       "patch": {
         "tags": [
-          "Account"
+          "Staff",
+          "Admin"
         ],
         "summary": "Updates the bank account status",
         "security": [
@@ -275,7 +279,8 @@
     "/accounts/{accountNumber}": {
       "delete": {
         "tags": [
-          "Account"
+          "Staff",
+          "Admin"
         ],
         "summary": "Delete bank account information by account number",
         "security": [
@@ -304,7 +309,9 @@
       },
       "get": {
         "tags": [
-          "Account"
+          "Client",
+          "Staff",
+          "Admin"
         ],
         "summary": "Find bank account by account number",
         "security": [
@@ -348,7 +355,9 @@
     "/user/{email}/accounts": {
       "get": {
         "tags": [
-          "Account"
+          "Client",
+          "Staff",
+          "Admin"
         ],
         "summary": "Find Bank account by user email",
         "security": [
@@ -390,7 +399,7 @@
     "/transactions/{accountNumber}/credit": {
       "post": {
         "tags": [
-          "Transaction"
+          "Staff"
         ],
         "summary": "Create a new credit transaction in the system",
         "security": [
@@ -430,7 +439,7 @@
     "/transactions/{accountNumber}/debit": {
       "post": {
         "tags": [
-          "Transaction"
+          "Staff"
         ],
         "summary": "Create a new debit transaction in the system",
         "security": [
@@ -470,7 +479,9 @@
     "/accounts/{accountNumber}/transactions": {
       "get": {
         "tags": [
-          "Transaction"
+          "Client",
+          "Staff",
+          "Admin"
         ],
         "summary": "Find transaction by account number",
         "security": [
@@ -513,7 +524,9 @@
     "/transactions/{id}": {
       "get": {
         "tags": [
-          "Transaction"
+          "Client",
+          "Staff",
+          "Admin"
         ],
         "summary": "Find transaction by ID",
         "security": [
@@ -549,6 +562,78 @@
           },
           "404": {
             "description": "Transaction not found"
+          }
+        }
+      }
+    },
+    "/user/admin": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Register a new user account",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "firstName",
+                  "lastName",
+                  "email",
+                  "password",
+                  "confirmPassword"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string",
+                    "minLength": 4
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "minLength": 4
+                  },
+                  "email": {
+                    "type": "string",
+                    "minLength": 4,
+                    "pattern": "/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 4
+                  },
+                  "confirmPassword": {
+                    "type": "string",
+                    "minLength": 4
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing required parameter"
           }
         }
       }

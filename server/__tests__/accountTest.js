@@ -16,20 +16,60 @@ const testUser = {
   password: 'password',
   confirmPassword: 'password',
 };
+
+const testAdmin = {
+  id: 101,
+  firstName: 'admin',
+  lastName: 'admin',
+  email: 'admin@gmail.com',
+  password: 'password',
+  confirmPassword: 'password',
+  type: 'admin',
+};
+
+const jwtUser = {
+  id: 89,
+  firstName: 'dele',
+  lastName: 'bella',
+  email: 'test@tested.com',
+  type: 'client',
+  isAdmin: false,
+};
+
+const jwtAdmin = {
+  id: 101,
+  firstName: 'admin',
+  lastName: 'admin',
+  email: 'admin@gmail.com',
+  type: 'staff',
+  isAdmin: true,
+};
+
 const accountUser = {
   type: 'savings',
 };
 
-const userToken = jwt.sign(testUser, SECRET, { expiresIn: '24h' });
+const userToken = jwt.sign(jwtUser, SECRET, { expiresIn: '24h' });
+const adminToken = jwt.sign(jwtAdmin, SECRET, { expiresIn: '24h' });
 
 describe('Testing Accounts Controller', () => {
   /**
      * Sign in user to generate user token before test
      */
-  before('account operations can begin when user have signed up', (done) => {
+  before('account can be created user have to be signed up', (done) => {
     chai.request(app)
       .post(`${API_VERSION}/auth/signup`)
       .send(testUser)
+      .end((error, response) => {
+        expect(response.body.status).to.equal(201);
+        done();
+      });
+  });
+
+  before('account operations can begin only by admin or staff that have signed up', (done) => {
+    chai.request(app)
+      .post(`${API_VERSION}/auth/signup`)
+      .send(testAdmin)
       .end((error, response) => {
         expect(response.body.status).to.equal(201);
         done();
@@ -120,8 +160,43 @@ describe('Testing Accounts Controller', () => {
   });
 
   /**
-     * Test the PATCH /accounts/:accountNumber endpoint
+     * Test the GET /accounts/:accountNumber endpoint
      */
+  describe('View specific account detail', () => {
+    let accountNumber = 2039939293;
+
+    it('should view a specific account detail', (done) => {
+      chai.request(app)
+        .get(`${API_VERSION}/accounts/${accountNumber}`)
+        .set('Authorization', adminToken)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(200);
+          expect(response.body.data).to.be.an('array');
+          done();
+        });
+    });
+
+    it('should not view an account detail if the account number is wrong or does not exist', (done) => {
+      accountNumber = 2220108723333;
+      chai.request(app)
+        .get(`${API_VERSION}/accounts/${accountNumber}`)
+        .set('Authorization', adminToken)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(404);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('Account number does not exist');
+          done();
+        });
+    });
+  });
+
+  /**
+       * Test the PATCH /accounts/:accountNumber endpoint
+       */
   describe('Change of status by activating or deactivating the accounts of account holders', () => {
     let accountNumber = 2559939393;
     let accountbody = { status: 'activate' };
@@ -129,7 +204,7 @@ describe('Testing Accounts Controller', () => {
     it('should activate a user bank account', (done) => {
       chai.request(app)
         .patch(`${API_VERSION}/account/${accountNumber}`)
-        .set('Authorization', userToken)
+        .set('Authorization', adminToken)
         .send(accountbody)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -145,7 +220,7 @@ describe('Testing Accounts Controller', () => {
       accountbody = { status: 'deactivate' };
       chai.request(app)
         .patch(`${API_VERSION}/account/${accountNumber}`)
-        .set('Authorization', userToken)
+        .set('Authorization', adminToken)
         .send(accountbody)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -161,7 +236,7 @@ describe('Testing Accounts Controller', () => {
       accountNumber = 2220108723333;
       chai.request(app)
         .patch(`${API_VERSION}/account/${accountNumber}`)
-        .set('Authorization', userToken)
+        .set('Authorization', adminToken)
         .send(accountbody)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -172,11 +247,25 @@ describe('Testing Accounts Controller', () => {
         });
     });
 
+    it('should not change status if request is made by a client', (done) => {
+      chai.request(app)
+        .patch(`${API_VERSION}/account/${accountNumber}`)
+        .set('Authorization', userToken)
+        .send(accountbody)
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(401);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('You are not authorized');
+          done();
+        });
+    });
+
     it('should not change status when the wrong request is sent', (done) => {
       accountbody = { status: 'validate' };
       chai.request(app)
         .patch(`${API_VERSION}/account/${accountNumber}`)
-        .set('Authorization', userToken)
+        .set('Authorization', adminToken)
         .send(accountbody)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -191,7 +280,7 @@ describe('Testing Accounts Controller', () => {
       accountbody = { status: '' };
       chai.request(app)
         .patch(`${API_VERSION}/account/${accountNumber}`)
-        .set('Authorization', userToken)
+        .set('Authorization', adminToken)
         .send(accountbody)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -204,15 +293,15 @@ describe('Testing Accounts Controller', () => {
   });
 
   /**
-     * Test the DELETE /accounts/:accountNumber endpoint
-     */
+       * Test the DELETE /accounts/:accountNumber endpoint
+       */
   describe('Delete account of account holders', () => {
     let accountNumber = 2559939393;
 
     it('should delete a user bank account', (done) => {
       chai.request(app)
         .delete(`${API_VERSION}/accounts/${accountNumber}`)
-        .set('Authorization', userToken)
+        .set('Authorization', adminToken)
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -226,7 +315,7 @@ describe('Testing Accounts Controller', () => {
       accountNumber = 2220108723333;
       chai.request(app)
         .delete(`${API_VERSION}/accounts/${accountNumber}`)
-        .set('Authorization', userToken)
+        .set('Authorization', adminToken)
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -239,15 +328,15 @@ describe('Testing Accounts Controller', () => {
   });
 
   /**
-     * Test the GET /accounts/:accountNumber/transactions endpoint
-     */
+       * Test the GET /accounts/:accountNumber/transactions endpoint
+       */
   describe('View an account’s transaction history', () => {
     let accountNumber = 2039939293;
 
     it('should view an account\'s transaction history', (done) => {
       chai.request(app)
         .get(`${API_VERSION}/accounts/${accountNumber}/transactions`)
-        .set('Authorization', userToken)
+        .set('Authorization', adminToken)
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -261,7 +350,7 @@ describe('Testing Accounts Controller', () => {
       accountNumber = 2220108723333;
       chai.request(app)
         .get(`${API_VERSION}/accounts/${accountNumber}/transactions`)
-        .set('Authorization', userToken)
+        .set('Authorization', adminToken)
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -274,48 +363,13 @@ describe('Testing Accounts Controller', () => {
   });
 
   /**
-     * Test the GET /accounts/:accountNumber endpoint
-     */
-  describe('View specific account detail', () => {
-    let accountNumber = 2039939293;
-
-    it('should view a specific account detail', (done) => {
-      chai.request(app)
-        .get(`${API_VERSION}/accounts/${accountNumber}`)
-        .set('Authorization', userToken)
-        .send()
-        .end((error, response) => {
-          expect(response.body).to.be.an('object');
-          expect(response.body.status).to.equal(200);
-          expect(response.body.data).to.be.an('array');
-          done();
-        });
-    });
-
-    it('should not view an account detail if the account number is wrong or does not exist', (done) => {
-      accountNumber = 2220108723333;
-      chai.request(app)
-        .get(`${API_VERSION}/accounts/${accountNumber}`)
-        .set('Authorization', userToken)
-        .send()
-        .end((error, response) => {
-          expect(response.body).to.be.an('object');
-          expect(response.body.status).to.equal(404);
-          expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Account number does not exist');
-          done();
-        });
-    });
-  });
-
-  /**
-     * Test the GET /accounts endpoint
-     */
+       * Test the GET /accounts endpoint
+       */
   describe('View all accounts', () => {
     it('should view all accounts', (done) => {
       chai.request(app)
         .get(`${API_VERSION}/accounts`)
-        .set('Authorization', userToken)
+        .set('Authorization', adminToken)
         .send()
         .end((error, response) => {
           expect(response.body).to.be.an('object');
@@ -340,9 +394,9 @@ describe('Testing Accounts Controller', () => {
   });
 
   /**
-     * Test the GET /accounts?status=dormant endpoint
-     */
-  describe('View all dormant accounts', () => {
+       * Test the GET /accounts?status=dormant endpoint
+       */
+  describe('View all accounts by status', () => {
     it('should not view all dormant accounts if not authorized', (done) => {
       chai.request(app)
         .get(`${API_VERSION}/accounts?status=dormant`)
