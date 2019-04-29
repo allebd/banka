@@ -1,15 +1,17 @@
-/* eslint-disable max-len */
+import dotenv from 'dotenv';
 import transactionController from '../controllers/transactionController';
-import transactionValidation from '../middleware/validations/transactionValidation';
-import authenticate from '../middleware/authenticate';
-import verifyStaff from '../middleware/validations/verifyStaff';
+import authenticate from '../middleware/authentications';
+import { staffRole } from '../middleware/permissions';
+import { validateAmount, validateTransaction } from '../middleware/validations';
 
-const API_VERSION = '/api/v1';
+dotenv.config();
+
+const { API_VERSION } = process.env;
 
 const transactionRoute = (app) => {
-  app.post(`${API_VERSION}/transactions/:accountNumber/credit`, authenticate, verifyStaff, transactionValidation.validateAmount, transactionController.creditAccount);
-  app.post(`${API_VERSION}/transactions/:accountNumber/debit`, authenticate, verifyStaff, transactionValidation.validateAmount, transactionController.debitAccount);
-  app.get(`${API_VERSION}/transactions/:transactionId`, authenticate, transactionValidation.validateTransaction, transactionController.checkTransaction);
+  app.post(`${API_VERSION}/transactions/:accountNumber/credit`, authenticate, staffRole, validateAmount, transactionController.creditAccount);
+  app.post(`${API_VERSION}/transactions/:accountNumber/debit`, authenticate, staffRole, validateAmount, transactionController.debitAccount);
+  app.get(`${API_VERSION}/transactions/:transactionId`, authenticate, validateTransaction, transactionController.checkTransaction);
 };
 
 export default transactionRoute;

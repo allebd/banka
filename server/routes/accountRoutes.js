@@ -1,18 +1,20 @@
-/* eslint-disable max-len */
+import dotenv from 'dotenv';
 import accountController from '../controllers/accountController';
-import accountValidation from '../middleware/validations/accountValidation';
-import authenticate from '../middleware/authenticate';
-import verifyAdminStaff from '../middleware/validations/verifyAdminStaff';
+import authenticate from '../middleware/authentications';
+import { adminStaffRole } from '../middleware/permissions';
+import { validateCreate, validateStatusChange, validateAccountNumber } from '../middleware/validations';
 
-const API_VERSION = '/api/v1';
+dotenv.config();
+
+const { API_VERSION } = process.env;
 
 const accountRoute = (app) => {
-  app.post(`${API_VERSION}/accounts`, authenticate, accountValidation.validateCreate, accountController.createAccount);
-  app.patch(`${API_VERSION}/account/:accountNumber`, authenticate, verifyAdminStaff, accountValidation.validateStatusChange, accountController.changeAccountStatus);
-  app.delete(`${API_VERSION}/accounts/:accountNumber`, authenticate, verifyAdminStaff, accountController.deleteAccount);
-  app.get(`${API_VERSION}/accounts/:accountNumber/transactions`, authenticate, accountController.accountTransactions);
-  app.get(`${API_VERSION}/accounts/:accountNumber`, authenticate, accountController.checkAccountNumber);
-  app.get(`${API_VERSION}/accounts`, authenticate, verifyAdminStaff, accountController.checkAccounts);
+  app.post(`${API_VERSION}/accounts`, authenticate, validateCreate, accountController.createAccount);
+  app.patch(`${API_VERSION}/account/:accountNumber`, authenticate, adminStaffRole, validateStatusChange, accountController.changeAccountStatus);
+  app.delete(`${API_VERSION}/accounts/:accountNumber`, authenticate, adminStaffRole, validateAccountNumber, accountController.deleteAccount);
+  app.get(`${API_VERSION}/accounts/:accountNumber/transactions`, authenticate, validateAccountNumber, accountController.accountTransactions);
+  app.get(`${API_VERSION}/accounts/:accountNumber`, authenticate, validateAccountNumber, accountController.checkAccountNumber);
+  app.get(`${API_VERSION}/accounts`, authenticate, adminStaffRole, accountController.checkAccounts);
 };
 
 export default accountRoute;

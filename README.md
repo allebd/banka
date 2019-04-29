@@ -80,13 +80,17 @@ API Documention was generated with [Swagger](https://banka-allebd.herokuapp.com/
 * Installing the project dependencies
   > Run the command below
 
-  $ npm install
+```shell
+   npm install
+```
 
 * Start your node server
   > run the command below
-  
-  $ npm start
-  
+
+```shell
+  npm start
+```
+
 * Use `http://localhost:5000` as base url for endpoints
 
 ### Endpoints
@@ -98,19 +102,26 @@ API Documention was generated with [Swagger](https://banka-allebd.herokuapp.com/
 | POST   | Create a bank account                   | `/api/v1/accounts`
 | GET    | Get all accounts                        | `/api/v1/accounts`
 | GET    | Get a specific account                  | `/api/v1/accounts/:accountNumber`
-| PATCH | Activate or deactive an account          | `/api/v1/account/:accountNumber`
+| PATCH | Activate or deactivate an account          | `/api/v1/account/:accountNumber`
 | DELETE   | Delete an account                     | `/api/v1/accounts/:accountNumber`
 | POST     | Perform a debit transaction           | `/api/v1/transactions/{accountNumber}/debit`
 | POST     | Perform a credit transaction          | `/api/v1/transactions/{accountNumber}/credit`
-| GET    | Get all account transactions            | `/api/v1/accounts/{accountNumber}/transactions`
+| GET    | Get all account's transactions            | `/api/v1/accounts/{accountNumber}/transactions`
 | GET    | Get specific transaction                | `/api/v1/transactions/{id}`
+| GET | Get all dormant account         | `/api/v1/accounts?status=active`
+| GET   | Get all active account                 | `/api/v1/accounts?status=dormant`
+| GET     | Get all accounts owned by a specific user          | `/api/v1/user/:userEmail/accounts`
+| POST    | Create staff/admin account            | `/api/v1/user/admin`
+| GET    | Get API Documentation                | `/api-docs`
 
 ### Running Unit Test
 
 * Run test for all endpoints
   > run the command below
-
-  $ npm test
+  
+```shell
+  npm test
+```
 
 ## Acknowledgements
 

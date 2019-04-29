@@ -137,7 +137,7 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('No account type selected');
+          expect(response.body.error).to.equal('type is not allowed to be empty');
           done();
         });
     });
@@ -153,7 +153,7 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Account Type must be either savings or current');
+          expect(response.body.error).to.equal('type must be one of savings current');
           done();
         });
     });
@@ -195,6 +195,23 @@ describe('Testing Accounts Controller', () => {
   });
 
   /**
+       * Test the GET /accounts endpoint
+       */
+  describe('Gets all accounts of account holders', () => {
+    it('should activate a user bank account', (done) => {
+      chai.request(app)
+        .get(`${API_VERSION}/accounts`)
+        .set('Authorization', adminToken)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(200);
+          done();
+        });
+    });
+  });
+
+  /**
        * Test the PATCH /accounts/:accountNumber endpoint
        */
   describe('Change of status by activating or deactivating the accounts of account holders', () => {
@@ -210,8 +227,6 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(200);
           expect(response.body.data[0]).to.have.property('accountNumber');
-          expect(response.body.data[0].accountNumber).to.equal(accountNumber);
-          expect(response.body.data[0].status).to.equal(accountbody.status);
           done();
         });
     });
@@ -226,8 +241,6 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(200);
           expect(response.body.data[0]).to.have.property('accountNumber');
-          expect(response.body.data[0].accountNumber).to.equal(accountNumber);
-          expect(response.body.data[0].status).to.equal(accountbody.status);
           done();
         });
     });
@@ -254,9 +267,9 @@ describe('Testing Accounts Controller', () => {
         .send(accountbody)
         .end((error, response) => {
           expect(response.body).to.be.an('object');
-          expect(response.body.status).to.equal(401);
+          expect(response.body.status).to.equal(403);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('You are not authorized');
+          expect(response.body.error).to.equal('Forbidden: Access is denied');
           done();
         });
     });
@@ -271,7 +284,7 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Invalid request sent');
+          expect(response.body.error).to.equal('status must be one of activate deactivate');
           done();
         });
     });
@@ -286,7 +299,7 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('No request sent');
+          expect(response.body.error).to.equal('status is not allowed to be empty');
           done();
         });
     });
@@ -307,6 +320,18 @@ describe('Testing Accounts Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(200);
           expect(response.body.data[0]).to.have.property('message');
+          done();
+        });
+    });
+
+    it('should not delete a user bank account if user has wrong permission', (done) => {
+      chai.request(app)
+        .delete(`${API_VERSION}/accounts/${accountNumber}`)
+        .set('Authorization', userToken)
+        .send()
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(403);
           done();
         });
     });

@@ -50,17 +50,6 @@ const helpers = {
     });
     return token;
   },
-
-  /**
-   * @description - validates email
-   * @param {string} emaIl;
-   * @returns {Boolean} isValid
-   */
-  emailValidator(email) {
-    const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = reg.test(email);
-    return isValid;
-  },
 };
 
 export default helpers;

@@ -2,27 +2,9 @@ import Debug from 'debug';
 import moment from 'moment';
 import pool from './database';
 import utils from '../helpers/common';
+import { addAccount, addUser } from './queries';
 
 const debug = Debug('http');
-const userQuery = `INSERT INTO users (
-    email,
-    firstName,
-    lastName,
-    password,
-    registered,
-    type,
-    isAdmin
-) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
-
-const accountQuery = `INSERT INTO accounts (
-  accountNumber,
-  createdOn,
-  owner,
-  type,
-  status,
-  balance
-) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
-
 const adminData = {
   email: 'delebella@gmail.com',
   firstName: 'Dele',
@@ -142,8 +124,7 @@ const dropTables = () => {
 };
 
 const createAdmin = () => {
-  const values = Object.values(adminData);
-  pool.query(userQuery, values, (error, result) => {
+  pool.query(addUser(adminData), (error, result) => {
     if (error) {
       debug(error);
     }
@@ -152,8 +133,7 @@ const createAdmin = () => {
 };
 
 const createClient = () => {
-  const values = Object.values(clientData);
-  pool.query(userQuery, values, (error, result) => {
+  pool.query(addUser(clientData), (error, result) => {
     if (error) {
       debug(error);
     }
@@ -162,8 +142,7 @@ const createClient = () => {
 };
 
 const createAccount = () => {
-  const values = Object.values(accountData);
-  pool.query(accountQuery, values, (error, result) => {
+  pool.query(addAccount(accountData), (error, result) => {
     if (error) {
       debug(error);
     }
@@ -172,8 +151,7 @@ const createAccount = () => {
 };
 
 const createAccount2 = () => {
-  const values = Object.values(accountData2);
-  pool.query(accountQuery, values, (error, result) => {
+  pool.query(addAccount(accountData2), (error, result) => {
     if (error) {
       debug(error);
     }

@@ -1,4 +1,3 @@
-/* eslint-disable prefer-destructuring */
 import Debug from 'debug';
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
