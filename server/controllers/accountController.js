@@ -1,6 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable max-len */
-/* eslint-disable no-shadow */
 import moment from 'moment';
 import utils from '../helpers/common';
 import statusCodes from '../helpers/statusCodes';
@@ -30,55 +27,55 @@ class AccountController {
    */
 
   static createAccount(request, response) {
-    const { type } = request.body;
-    const {
-      id, firstName, lastName, email,
-    } = request.decode;
+    try {
+      const { type } = request.body;
+      const {
+        id, firstName, lastName, email,
+      } = request.decode;
 
-    const data = {
-      accountNumber: utils.generateAccountNumber(),
-      createdOn: moment().format(),
-      owner: id,
-      type,
-      status: 'draft',
-      balance: 0.00,
-    };
+      const data = {
+        accountNumber: utils.generateAccountNumber(),
+        createdOn: moment().format(),
+        owner: id,
+        type,
+        status: 'draft',
+        balance: 0.00,
+      };
 
-    pool.connect((err, client, done) => {
-      client.query(addAccount(data), (error, result) => {
-        done();
-        if (error) {
-          if (error.code === '23505') {
-            response.status(400).json({
-              status: statusCodes.badRequest,
-              error: 'Account number generated already exists, try again.',
-            });
+      pool.connect((err, client, done) => {
+        client.query(addAccount(data), (error, result) => {
+          done();
+          if (error) {
+            if (error.code === '23505') {
+              response.status(400).json({
+                status: statusCodes.badRequest,
+                error: 'Account number generated already exists, try again.',
+              });
+            }
           }
-          response.status(400).json({
-            status: statusCodes.badRequest,
-            error: error.message,
-          });
-        }
-        const account = result.rows[0];
-        const {
-          accountnumber,
-          type,
-          balance,
-        } = account;
-
-        return response.status(201).json({
-          status: statusCodes.created,
-          data: [{
-            accountNumber: accountnumber,
-            firstName,
-            lastName,
-            email,
+          const account = result.rows[0];
+          const {
+            accountnumber,
             type,
-            openingBalance: balance,
-          }],
+            balance,
+          } = account;
+
+          return response.status(201).json({
+            status: statusCodes.created,
+            data: [{
+              accountNumber: accountnumber,
+              firstName,
+              lastName,
+              email,
+              type,
+              openingBalance: balance,
+            }],
+          });
         });
       });
-    });
+    } catch (e) {
+      return response.status(500).json({ status: statusCodes.serverError, error: 'Server Error' });
+    }
   }
 
   /**
@@ -89,31 +86,39 @@ class AccountController {
    * @returns {json} json
    * @memberof AccountController
    */
-  // eslint-disable-next-line consistent-return
   static changeAccountStatus(request, response) {
-    const { status } = request.body;
-    let { accountNumber } = request.params;
-    accountNumber = parseInt(accountNumber, 10);
+    try {
+      let { status } = request.body;
+      const { accountNumber } = request.params;
 
-    pool.connect((err, client, done) => {
-      client.query(updateAccountStatus(status, accountNumber), (error, result) => {
-        done();
-        if (error || result.rows.length === 0) {
-          return response.status(404).json({
-            status: statusCodes.notFound,
-            error: 'Account number does not exist',
+      if (status === 'activate') {
+        status = 'active';
+      } else {
+        status = 'dormant';
+      }
+
+      pool.connect((err, client, done) => {
+        client.query(updateAccountStatus(status, accountNumber), (error, result) => {
+          done();
+          if (result.rows.length === 0) {
+            return response.status(404).json({
+              status: statusCodes.notFound,
+              error: 'Account number does not exist',
+            });
+          }
+
+          return response.status(200).json({
+            status: statusCodes.success,
+            data: [{
+              accountNumber,
+              status,
+            }],
           });
-        }
-
-        return response.status(200).json({
-          status: statusCodes.success,
-          data: [{
-            accountNumber,
-            status,
-          }],
         });
       });
-    });
+    } catch (e) {
+      return response.status(500).json({ status: statusCodes.serverError, error: 'Server Error' });
+    }
   }
 
   /**
@@ -124,27 +129,29 @@ class AccountController {
    * @returns {json} json
    * @memberof AccountController
    */
-  // eslint-disable-next-line consistent-return
   static deleteAccount(request, response) {
-    let { accountNumber } = request.params;
-    accountNumber = parseInt(accountNumber, 10);
+    try {
+      const { accountNumber } = request.params;
 
-    pool.connect((err, client, done) => {
-      client.query(deleteAccount(accountNumber), (error, result) => {
-        done();
-        if (error || result.rows.length === 0) {
-          return response.status(404).json({
-            status: statusCodes.notFound,
-            error: 'Account number does not exist',
+      pool.connect((err, client, done) => {
+        client.query(deleteAccount(accountNumber), (error, result) => {
+          done();
+          if (result.rows.length === 0) {
+            return response.status(404).json({
+              status: statusCodes.notFound,
+              error: 'Account number does not exist',
+            });
+          }
+
+          return response.status(200).json({
+            status: statusCodes.success,
+            data: [{ message: 'Account successfully deleted' }],
           });
-        }
-
-        return response.status(200).json({
-          status: statusCodes.success,
-          data: [{ message: 'Account successfully deleted' }],
         });
       });
-    });
+    } catch (e) {
+      return response.status(500).json({ status: statusCodes.serverError, error: 'Server Error' });
+    }
   }
 
   /**
@@ -155,37 +162,32 @@ class AccountController {
    * @returns {json} json
    * @memberof AccountController
    */
-  // eslint-disable-next-line consistent-return
   static accountTransactions(request, response) {
-    let { accountNumber } = request.params;
-    accountNumber = parseInt(accountNumber, 10);
+    try {
+      const { accountNumber } = request.params;
 
-    pool.connect((err, client, done) => {
-      client.query(getAccountByNumber(accountNumber), (error, result) => {
-        done();
-        if (error || result.rows.length === 0) {
-          return response.status(404).json({
-            status: statusCodes.notFound,
-            error: 'Account number does not exist',
-          });
-        }
-
-        client.query(getAccountTransactions(accountNumber), (transactError, transactResult) => {
+      pool.connect((err, client, done) => {
+        client.query(getAccountByNumber(accountNumber), (error, result) => {
           done();
-          if (transactError) {
+          if (result.rows.length === 0) {
             return response.status(404).json({
               status: statusCodes.notFound,
-              error: 'No record found',
+              error: 'Account number does not exist',
             });
           }
 
-          return response.status(200).json({
-            status: statusCodes.success,
-            data: transactResult.rows,
+          client.query(getAccountTransactions(accountNumber), (transactError, transactResult) => {
+            done();
+            return response.status(200).json({
+              status: statusCodes.success,
+              data: transactResult.rows,
+            });
           });
         });
       });
-    });
+    } catch (e) {
+      return response.status(500).json({ status: statusCodes.serverError, error: 'Server Error' });
+    }
   }
 
   /**
@@ -196,35 +198,42 @@ class AccountController {
    * @returns {json} json
    * @memberof AccountController
    */
-  // eslint-disable-next-line consistent-return
   static checkAccountNumber(request, response) {
-    let { accountNumber } = request.params;
-    accountNumber = parseInt(accountNumber, 10);
+    try {
+      const { accountNumber } = request.params;
 
-    pool.connect((err, client, done) => {
-      client.query(getAccountByNumber(accountNumber), (error, result) => {
-        done();
-        if (error || result.rows.length === 0) {
-          return response.status(404).json({
-            status: statusCodes.notFound,
-            error: 'Account number does not exist',
+      pool.connect((err, client, done) => {
+        client.query(getAccountByNumber(accountNumber), (error, result) => {
+          done();
+          if (result.rows.length === 0) {
+            return response.status(404).json({
+              status: statusCodes.notFound,
+              error: 'Account number does not exist',
+            });
+          }
+
+          const accountDetails = result.rows[0];
+          const {
+            createdon, accountnumber, owner, type, status, balance,
+          } = accountDetails;
+          const user = getUserById(owner);
+
+          return response.status(200).json({
+            status: statusCodes.success,
+            data: [{
+              createdOn: createdon,
+              accountNumber: accountnumber,
+              ownerEmail: user.email,
+              type,
+              status,
+              balance,
+            }],
           });
-        }
-
-        const accountDetails = result.rows[0];
-        const {
-          createdon, accountnumber, owner, type, status, balance,
-        } = accountDetails;
-        const user = getUserById(owner);
-
-        return response.status(200).json({
-          status: statusCodes.success,
-          data: [{
-            createdOn: createdon, accountNumber: accountnumber, ownerEmail: user.email, type, status, balance,
-          }],
         });
       });
-    });
+    } catch (e) {
+      return response.status(500).json({ status: statusCodes.serverError, error: 'Server Error' });
+    }
   }
 
   /**
@@ -235,20 +244,38 @@ class AccountController {
    * @returns {json} json
    * @memberof AccountController
    */
-  // eslint-disable-next-line consistent-return
   static checkAccounts(request, response) {
-    const { status } = request.query;
+    try {
+      const { status } = request.query;
 
-    if (status) {
-      pool.connect((err, client, done) => {
-        client.query(getAccountByStatus(), (error, result) => {
-          done();
-          if (error || result.rows.length === 0) {
-            return response.status(404).json({
-              status: statusCodes.notFound,
-              error: 'No record exist',
+      if (status) {
+        pool.connect((err, client, done) => {
+          client.query(getAccountByStatus(), (error, result) => {
+            done();
+            if (result.rows.length === 0) {
+              return response.status(404).json({
+                status: statusCodes.notFound,
+                error: 'No record exist',
+              });
+            }
+
+            const accountDetails = result.rows;
+
+            return response.status(200).json({
+              status: statusCodes.success,
+              data: accountDetails,
             });
-          }
+          });
+        });
+      }
+    } catch (e) {
+      return response.status(500).json({ status: statusCodes.serverError, error: 'Server Error' });
+    }
+
+    try {
+      pool.connect((err, client, done) => {
+        client.query(getAccounts(), (error, result) => {
+          done();
 
           const accountDetails = result.rows;
 
@@ -258,26 +285,9 @@ class AccountController {
           });
         });
       });
+    } catch (e) {
+      return response.status(500).json({ status: statusCodes.serverError, error: 'Server Error' });
     }
-
-    pool.connect((err, client, done) => {
-      client.query(getAccounts(), (error, result) => {
-        done();
-        if (error || result.rows.length === 0) {
-          return response.status(404).json({
-            status: statusCodes.notFound,
-            error: 'No record exist',
-          });
-        }
-
-        const accountDetails = result.rows;
-
-        return response.status(200).json({
-          status: statusCodes.success,
-          data: accountDetails,
-        });
-      });
-    });
   }
 }
 

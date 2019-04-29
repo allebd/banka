@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 
 const API_VERSION = '/api/v1';
 const testStaff = {
-  id: 101,
+  id: 102,
   firstName: 'staff',
   lastName: 'staff',
   email: 'staff@gmail.com',
@@ -19,11 +19,23 @@ const testStaff = {
   isAdmin: false,
 };
 
+const testAdmin = {
+  id: 57,
+  firstName: 'admins',
+  lastName: 'admins',
+  email: 'admins@gmail.com',
+  password: 'password',
+  confirmPassword: 'password',
+  type: 'admin',
+  isAdmin: true,
+};
+
 const transactionUser = {
   amount: 555555,
 };
 const accountNumber = 2039939293;
 const staffToken = jwt.sign(testStaff, SECRET, { expiresIn: '24h' });
+const adminToken = jwt.sign(testAdmin, SECRET, { expiresIn: '24h' });
 
 describe('Testing Transaction Controller', () => {
   /**
@@ -100,7 +112,7 @@ describe('Testing Transaction Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Amount is too low');
+          expect(response.body.error).to.equal('amount must be a positive number');
           done();
         });
     });
@@ -116,7 +128,7 @@ describe('Testing Transaction Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Amount is too low');
+          expect(response.body.error).to.equal('amount must be a positive number');
           done();
         });
     });
@@ -130,7 +142,6 @@ describe('Testing Transaction Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('A number is expected');
           done();
         });
     });
@@ -141,6 +152,20 @@ describe('Testing Transaction Controller', () => {
        * Test the POST /transactions/<account-number>/debit endpoint
        */
     const transactionUrl = `${API_VERSION}/transactions/${accountNumber}/debit`;
+
+    it('should not debit account when user has wrong permission', (done) => {
+      chai.request(app)
+        .post(transactionUrl)
+        .set('Authorization', adminToken)
+        .send({
+          amount: 100,
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(403);
+          done();
+        });
+    });
 
     it('should not create account when authorization is undefined', (done) => {
       chai.request(app)
@@ -166,26 +191,6 @@ describe('Testing Transaction Controller', () => {
         });
     });
 
-    it('should debit account when all the parameters are given', (done) => {
-      chai.request(app)
-        .post(transactionUrl)
-        .set('Authorization', staffToken)
-        .send(transactionUser)
-        .end((error, response) => {
-          expect(response.body).to.be.an('object');
-          expect(response).to.have.status(200);
-          expect(response.body.status).to.equal(200);
-          expect(response.body.data).to.be.a('array');
-          expect(response.body.data[0]).to.have.property('transactionId');
-          expect(response.body.data[0]).to.have.property('accountNumber');
-          expect(response.body.data[0]).to.have.property('amount');
-          expect(response.body.data[0]).to.have.property('cashier');
-          expect(response.body.data[0]).to.have.property('transactionType');
-          expect(response.body.data[0]).to.have.property('accountBalance');
-          done();
-        });
-    });
-
     it('should not debit account when the amount is zero', (done) => {
       chai.request(app)
         .post(transactionUrl)
@@ -197,7 +202,7 @@ describe('Testing Transaction Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Amount is too low');
+          expect(response.body.error).to.equal('amount must be a positive number');
           done();
         });
     });
@@ -213,7 +218,7 @@ describe('Testing Transaction Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('No amount entered');
+          expect(response.body.error).to.equal('amount must be a number');
           done();
         });
     });
@@ -229,7 +234,7 @@ describe('Testing Transaction Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Amount is too low');
+          expect(response.body.error).to.equal('amount must be a positive number');
           done();
         });
     });
@@ -259,7 +264,6 @@ describe('Testing Transaction Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('A number is expected');
           done();
         });
     });

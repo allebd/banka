@@ -2,5 +2,12 @@
     "extends": "airbnb-base",
     "env": {
       "mocha": true
+    },
+    "rules": {
+      "consistent-return":"off",
+      "prefer-destructuring":"off",
+      "no-shadow":"off",
+      "no-unused-vars":"off",
+      "max-len":"off"
     }
 }

@@ -134,6 +134,9 @@
           },
           "400": {
             "description": "Missing required parameter"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       }
@@ -180,6 +183,9 @@
           },
           "400": {
             "description": "Missing required parameter"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       },
@@ -218,8 +224,14 @@
           "401": {
             "description": "Access denied, no token provided"
           },
+          "403": {
+            "description": "Forbidden: Access is denied"
+          },
           "404": {
             "description": "Account not found"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       }
@@ -270,8 +282,14 @@
           "401": {
             "description": "Access denied, no token provided"
           },
+          "403": {
+            "description": "Forbidden: Access is denied"
+          },
           "404": {
             "description": "Account not found"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       }
@@ -299,11 +317,17 @@
           }
         ],
         "responses": {
-          "203": {
+          "200": {
             "description": "Account successfully deleted"
           },
           "400": {
             "description": "Account not found"
+          },
+          "403": {
+            "description": "Forbidden: Access is denied"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       },
@@ -392,6 +416,9 @@
           },
           "404": {
             "description": "no account created yet by {email}"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       }
@@ -432,6 +459,12 @@
           },
           "400": {
             "description": "Missing required parameter"
+          },
+          "403": {
+            "description": "Forbidden: Access is denied"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       }
@@ -472,6 +505,12 @@
           },
           "400": {
             "description": "Missing required parameter"
+          },
+          "403": {
+            "description": "Forbidden: Access is denied"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       }
@@ -515,8 +554,14 @@
           "401": {
             "description": "Access denied, no token provided"
           },
+          "403": {
+            "description": "Forbidden: Access is denied"
+          },
           "404": {
             "description": "Transaction not found"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       }
@@ -562,6 +607,9 @@
           },
           "404": {
             "description": "Transaction not found"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       }
@@ -634,6 +682,12 @@
           },
           "400": {
             "description": "Missing required parameter"
+          },
+          "403": {
+            "description": "Forbidden: Access is denied"
+          },
+          "500": {
+            "description": "Server Error"
           }
         }
       }

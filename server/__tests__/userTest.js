@@ -16,6 +16,16 @@ const testUser = {
   confirmPassword: 'password',
 };
 
+const testAdmin = {
+  id: 55,
+  firstName: 'admins',
+  lastName: 'admins',
+  email: 'admins@gmail.com',
+  password: 'password',
+  confirmPassword: 'password',
+  type: 'admin',
+};
+
 const jwtUser = {
   id: 67,
   firstName: 'dele',
@@ -25,7 +35,17 @@ const jwtUser = {
   isAdmin: false,
 };
 
+const jwtAdmin = {
+  id: 55,
+  firstName: 'admins',
+  lastName: 'admins',
+  email: 'admins@gmail.com',
+  type: 'staff',
+  isAdmin: true,
+};
+
 const userToken = jwt.sign(jwtUser, SECRET, { expiresIn: '24h' });
+const adminToken = jwt.sign(jwtAdmin, SECRET, { expiresIn: '24h' });
 
 describe('Testing User Controller', () => {
   describe('Testing signup controller', () => {
@@ -52,7 +72,7 @@ describe('Testing User Controller', () => {
         });
     });
 
-    it('should register a new user when the same email is used again', (done) => {
+    it('should not register a new user when the same email is used again', (done) => {
       chai.request(app)
         .post(signupUrl)
         .send(testUser)
@@ -79,7 +99,7 @@ describe('Testing User Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Email is required');
+          expect(response.body.error).to.equal('email is required');
           done();
         });
     });
@@ -98,7 +118,7 @@ describe('Testing User Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('First name is required');
+          expect(response.body.error).to.equal('firstName is required');
           done();
         });
     });
@@ -116,7 +136,7 @@ describe('Testing User Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Last name is required');
+          expect(response.body.error).to.equal('lastName is required');
           done();
         });
     });
@@ -135,7 +155,7 @@ describe('Testing User Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Password is required');
+          expect(response.body.error).to.equal('password is required');
           done();
         });
     });
@@ -148,13 +168,13 @@ describe('Testing User Controller', () => {
           firstName: 'dele',
           lastName: 'bella',
           password: 'password',
-          confirmPassword: 'Passwords do not match',
+          confirmPassword: 'pass',
         })
         .end((error, response) => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Passwords do not match');
+          expect(response.body.error).to.equal('confirmPassword must match password');
           done();
         });
     });
@@ -173,7 +193,7 @@ describe('Testing User Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Invalid email address');
+          expect(response.body.error).to.equal('email must be a valid email');
           done();
         });
     });
@@ -212,7 +232,7 @@ describe('Testing User Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Email is required');
+          expect(response.body.error).to.equal('email is required');
           done();
         });
     });
@@ -227,7 +247,7 @@ describe('Testing User Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Password is required');
+          expect(response.body.error).to.equal('password is required');
           done();
         });
     });
@@ -260,7 +280,7 @@ describe('Testing User Controller', () => {
           expect(response.body).to.be.an('object');
           expect(response.body.status).to.equal(400);
           expect(response.body.error).to.be.a('string');
-          expect(response.body.error).to.equal('Invalid email address');
+          expect(response.body.error).to.equal('email must be a valid email');
           done();
         });
     });
@@ -327,6 +347,191 @@ describe('Testing User Controller', () => {
           expect(response.body.status).to.equal(404);
           expect(response.body.error).to.be.a('string');
           expect(response.body.error).to.equal('User has no account created');
+          done();
+        });
+    });
+  });
+
+  describe('Testing admin create user account controller', () => {
+    /**
+       * Test the POST /user/admin endpoint
+       */
+    const signupUrl = `${API_VERSION}/user/admin`;
+    it('should register a new user account when all the parameters are given', (done) => {
+      chai.request(app)
+        .post(signupUrl)
+        .set('Authorization', adminToken)
+        .send(testAdmin)
+
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response).to.have.status(201);
+          expect(response.body.status).to.equal(201);
+          expect(response.body.data).to.be.a('array');
+          expect(response.body.data[0]).to.have.property('token');
+          expect(response.body.data[0]).to.have.property('id');
+          expect(response.body.data[0]).to.have.property('firstName');
+          expect(response.body.data[0]).to.have.property('lastName');
+          expect(response.body.data[0]).to.have.property('email');
+          done();
+        });
+    });
+
+    it('should not register a new user having wrong permission', (done) => {
+      chai.request(app)
+        .post(signupUrl)
+        .set('Authorization', userToken)
+        .send(testAdmin)
+
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(403);
+          expect(response.body.error).to.be.a('string');
+          done();
+        });
+    });
+
+    it('should not register a new user when the same email is used again', (done) => {
+      chai.request(app)
+        .post(signupUrl)
+        .set('Authorization', adminToken)
+        .send(testAdmin)
+
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('Email already exists');
+          done();
+        });
+    });
+
+    it('should not register a user when the email is missing', (done) => {
+      chai.request(app)
+        .post(signupUrl)
+        .set('Authorization', adminToken)
+        .send({
+          firstName: 'dele',
+          lastName: 'bella',
+          password: 'password',
+          confirmPassword: 'password',
+          type: 'staff',
+          isAdmin: true,
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('email is required');
+          done();
+        });
+    });
+
+    it('should not register a user when the first name is missing', (done) => {
+      chai.request(app)
+        .post(signupUrl)
+        .set('Authorization', adminToken)
+        .send({
+          lastName: 'dele',
+          username: 'bella',
+          email: 'testadmin@test.com',
+          password: 'password',
+          confirmPassword: 'password',
+          type: 'staff',
+          isAdmin: true,
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('firstName is required');
+          done();
+        });
+    });
+
+
+    it('should not register a user when the last name is missing', (done) => {
+      chai.request(app)
+        .post(signupUrl)
+        .set('Authorization', adminToken)
+        .send({
+          firstName: 'dele',
+          password: 'password',
+          confirmPassword: 'password',
+          type: 'staff',
+          isAdmin: true,
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('lastName is required');
+          done();
+        });
+    });
+
+    it('should not register a user when the password is missing', (done) => {
+      chai.request(app)
+        .post(signupUrl)
+        .set('Authorization', adminToken)
+        .send({
+          email: 'test@test.com',
+          firstName: 'dele',
+          lastName: 'bella',
+          username: 'password',
+          confirmPassword: 'password',
+          type: 'staff',
+          isAdmin: true,
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('password is required');
+          done();
+        });
+    });
+
+    it('should not register a user when the passwords do not match', (done) => {
+      chai.request(app)
+        .post(signupUrl)
+        .set('Authorization', adminToken)
+        .send({
+          email: 'test@test.com',
+          firstName: 'dele',
+          lastName: 'bella',
+          password: 'password',
+          confirmPassword: 'pass',
+          type: 'staff',
+          isAdmin: true,
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('confirmPassword must match password');
+          done();
+        });
+    });
+
+    it('should not register a user when the email is not valid', (done) => {
+      chai.request(app)
+        .post(signupUrl)
+        .set('Authorization', adminToken)
+        .send({
+          firstName: 'dele',
+          lastName: 'bella',
+          email: 'testtest.com',
+          password: 'password',
+          confirmPassword: 'password',
+          type: 'staff',
+          isAdmin: true,
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.an('object');
+          expect(response.body.status).to.equal(400);
+          expect(response.body.error).to.be.a('string');
+          expect(response.body.error).to.equal('email must be a valid email');
           done();
         });
     });
