@@ -8,7 +8,7 @@
     "postinstall": "npm run build",
     "build": "babel server -d dist && npm run build-babel",
     "build-babel": "babel ./server/docs --out-dir dist/docs --copy-files",
-    "test": "set NODE_ENV=TEST && npm run migrate && nyc mocha ./server/__tests__/*.js --require @babel/register --exit",
+    "test": "set NODE_ENV=TEST && npm run migrate && npm run seed && nyc mocha ./server/__tests__/*.js --require @babel/register --exit",
     "start:dev": "set DEBUG=http && nodemon --exec babel-node ./server/server.js",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "dropTable": "babel-node ./server/models/migrations dropTables",
@@ -18,7 +18,7 @@
     "createAccount": "babel-node ./server/models/migrations createAccount",
     "createAccount2": "babel-node ./server/models/migrations createAccount2",
     "seed": "npm run createClient && npm run createAccount && npm run createAccount2",
-    "migrate": "npm run dropTable && npm run createTable && npm run createAdmin && npm run seed"
+    "migrate": "npm run dropTable && npm run createTable && npm run createAdmin"
   },
   "repository": {
     "type": "git",
