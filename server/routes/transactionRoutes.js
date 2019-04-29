@@ -6,7 +6,7 @@ import { validateAmount, validateTransaction } from '../middleware/validations';
 
 dotenv.config();
 
-const { API_VERSION } = process.env;
+const API_VERSION = '/api/v1';
 
 const transactionRoute = (app) => {
   app.post(`${API_VERSION}/transactions/:accountNumber/credit`, authenticate, staffRole, validateAmount, transactionController.creditAccount);
