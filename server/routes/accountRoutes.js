@@ -6,7 +6,7 @@ import { validateCreate, validateStatusChange, validateAccountNumber } from '../
 
 dotenv.config();
 
-const { API_VERSION } = process.env;
+const { API_VERSION = '/api/v1' } = process.env;
 
 const accountRoute = (app) => {
   app.post(`${API_VERSION}/accounts`, authenticate, validateCreate, accountController.createAccount);
