@@ -289,6 +289,20 @@ footer a{
     padding: 5px;
 }
 
+.table_button.button_success, .table_button.button_danger{
+    background: var(--primary-purple);
+    width: 105px;
+}
+
+.table_button.button_success:hover{
+    background: var(--success-green);
+}
+
+.table_button.button_danger:hover{
+    background: var(--danger-red);
+    width: 105px;
+}
+
 /* Modal boxes */
 .modal-box{
     z-index: 1;
@@ -316,6 +330,16 @@ footer a{
 
 .modal-header h3{
     margin: 0;
+}
+
+.modal-button.button_success{
+    background: var(--success-green);
+    width: 105px;
+}
+
+.modal-button.button_danger{
+    background: var(--danger-red);
+    width: 105px;
 }
 
 .modal-footer {
